@@ -1,0 +1,80 @@
+.tree {
+	text-align: left;
+}
+.tree-@{theme-name} {
+	.tree-node,
+	.tree-icon { background-repeat:no-repeat; background-color:transparent; }
+	.tree-anchor,
+	.tree-animated,
+	.tree-wholerow { transition:background-color 0.15s, box-shadow 0.15s; }
+	.tree-hovered { background:@hovered-bg-color; border: 0px; box-shadow:none; }
+	.tree-context { background:@hovered-bg-color; border: 0px; box-shadow:none; }
+	.tree-clicked { background:@clicked-bg-color; border: 0px; box-shadow:none; }
+	.tree-no-icons .tree-anchor > .tree-themeicon { display:none; }
+	.tree-disabled {
+		background:transparent; color:@disabled-color;
+		&.tree-hovered { background:transparent; box-shadow:none; }
+		&.tree-clicked { background:@disabled-bg-color; }
+		> .tree-icon { opacity:0.8; filter: url("data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'tree-grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#tree-grayscale"); /* Firefox 10+ */ filter: gray; /* IE6-9 */ -webkit-filter: grayscale(100%); /* Chrome 19+ & Safari 6+ */ }
+	}
+	// search
+	.tree-search { font-style:italic; color:@search-result-color; font-weight:bold; }
+	// checkboxes
+	.tree-no-checkboxes .tree-checkbox { display:none !important; }
+	&.tree-checkbox-no-clicked {
+		.tree-clicked {
+			background:transparent;
+			box-shadow:none;
+			&.tree-hovered { background:@hovered-bg-color; }
+		}
+		> .tree-wholerow-ul .tree-wholerow-clicked {
+			background:transparent;
+			&.tree-wholerow-hovered { background:@hovered-bg-color; }
+		}
+	}
+	// stripes
+	> .tree-striped { min-width:100%; display:inline-block; background:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAkCAMAAAB/qqA+AAAABlBMVEUAAAAAAAClZ7nPAAAAAnRSTlMNAMM9s3UAAAAXSURBVHjajcEBAQAAAIKg/H/aCQZ70AUBjAATb6YPDgAAAABJRU5ErkJggg==") left top repeat; }
+	// wholerow
+	> .tree-wholerow-ul .tree-hovered,
+	> .tree-wholerow-ul .tree-clicked { background:transparent; box-shadow:none; border-radius:0; }
+	.tree-wholerow { -moz-box-sizing:border-box; -webkit-box-sizing:border-box; box-sizing:border-box; }
+	.tree-wholerow-hovered { background:@hovered-bg-color; }
+	.tree-wholerow-clicked { .gradient(@clicked-gradient-color-1, @clicked-gradient-color-2); }
+}
+
+// theme variants
+.tree-@{theme-name} {
+	.tree-theme(24px, "@{image-path}32px.png", 32px);
+	&.tree-rtl .tree-node { background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAACAQMAAAB49I5GAAAABlBMVEUAAAAdHRvEkCwcAAAAAXRSTlMAQObYZgAAAAxJREFUCNdjAAMOBgAAGAAJMwQHdQAAAABJRU5ErkJggg=="); }
+	&.tree-rtl .tree-last { background:transparent; }
+}
+.tree-@{theme-name}-small {
+	.tree-theme(18px, "@{image-path}32px.png", 32px);
+	&.tree-rtl .tree-node { background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAACAQMAAABv1h6PAAAABlBMVEUAAAAdHRvEkCwcAAAAAXRSTlMAQObYZgAAAAxJREFUCNdjAAMHBgAAiABBI4gz9AAAAABJRU5ErkJggg=="); }
+	&.tree-rtl .tree-last { background:transparent; }
+}
+.tree-@{theme-name}-large {
+	.tree-theme(32px, "@{image-path}32px.png", 32px);
+	&.tree-rtl .tree-node { background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAACAQMAAAAD0EyKAAAABlBMVEUAAAAdHRvEkCwcAAAAAXRSTlMAQObYZgAAAAxJREFUCNdjgIIGBgABCgCBvVLXcAAAAABJRU5ErkJggg=="); }
+	&.tree-rtl .tree-last { background:transparent; }
+}
+
+// mobile theme attempt
+@media (max-width: 768px) {
+	#tree-dnd.tree-dnd-responsive when (@responsive = true) {
+		line-height:@base-height; font-weight:bold; font-size:1.1em; text-shadow:1px 1px white;
+		> i { background:transparent; width:@base-height; height:@base-height; }
+		> .tree-ok { background-image:url("@{image-path}@{base-height}.png"); background-position:0 -(@base-height * 5); background-size:(@base-height * 3) (@base-height * 6); }
+		> .tree-er { background-image:url("@{image-path}@{base-height}.png"); background-position:-(@base-height * 1) -(@base-height * 5); background-size:(@base-height * 3) (@base-height * 6); }
+	}
+	#tree-marker.tree-dnd-responsive when (@responsive = true) {
+		border-left-width:10px;
+		border-top-width:10px;
+		border-bottom-width:10px;
+		margin-top:-10px;
+	}
+}
+
+.tree-@{theme-name}-responsive when (@responsive = true) {
+	@import "responsive.less";
+}
