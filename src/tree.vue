@@ -1,19 +1,22 @@
 <template>
-  <div :class="classes" role="tree" v-if="data.length > 0">
-    <ul class="tree-container-ul tree-children" role="group">
+  <div :class="classes" role="tree">
+    <ul :class="containerClasses" role="group">
       <item v-for="(child, index) in data"
             :key="index"
             :id="child.id"
             :text="child.text"
             :value="child.value"
             :icon="child.icon"
-            :opend="child.opend"
+            :opened.sync="child.opened"
             :selected="child.selected"
             :disabled="child.disabled"
             :children="child.children"
+            :whole-row="wholeRow"
             :show-checkbox="showCheckbox"
+            :loading="child.loading"
             :height="sizeHight"
-            :onclick="child.onclick"
+            :on-click="child.onClick"
+            :on-toggle="child.onToggle"
             :klass="index === data.length-1?'tree-last':''">
       </item>
     </ul>
@@ -22,7 +25,6 @@
 <script>
   import Vue from 'vue'
 
-  let ITEM_ID = 1
   let ITEM_HEIGHT_SMALL = 18
   let ITEM_HEIGHT_DEFAULT = 24
   let ITEM_HEIGHT_LARGE = 32
@@ -60,26 +62,30 @@
   Vue.component('item', {
     template: `
       <li role="treeitem" :class="classes">
+        <div role="presentation" :class="wholeRowClasses" v-if="isWholeRow">&nbsp;</div>
         <i class="tree-icon tree-ocl" role="presentation" @click="handleToggle"></i>
-        <a :class="anchorClass" href="javascript:;" @click="onclick(_self)">
-          <i class="tree-icon tree-checkbox" role="presentation" v-if="showCheckbox"></i>
-          <i class="tree-icon tree-themeicon" role="presentation"></i>
+        <a :class="anchorClasses" href="javascript:;" @click="onClick(_self)" @mouseover="hover=true" @mouseout="hover=false">
+          <i class="tree-icon tree-checkbox" role="presentation" v-if="showCheckbox && !loading"></i>
+          <i :class="themeIconClasses" role="presentation" v-if="!loading"></i>
           {{text}}
         </a>
         <ul role="group" ref="group" class="tree-children" v-if="isFolder">
-            <item v-for="(child, index) in children"
+          <item v-for="(child, index) in children"
                   :key="index"
                   :id="child.id"
                   :text="child.text"
                   :value="child.value"
                   :icon="child.icon"
-                  :opend="child.opend"
+                  :opened.sync="child.opened"
                   :selected="child.selected"
                   :disabled="child.disabled"
                   :children="child.children"
+                  :whole-row="wholeRow"
                   :show-checkbox="showCheckbox"
+                  :loading="child.loading"
                   :height="height"
-                  :onclick="child.onclick">
+                  :on-click="child.onClick"
+                  :on-toggle="child.onToggle">
             </item>
         </ul>
       </li>`,
@@ -88,18 +94,26 @@
       text: {type: String},
       value: {type: String},
       icon: {type: String},
-      opend: {type: Boolean, default: false},
+      opened: {type: Boolean, default: false},
       selected: {type: Boolean, default: false},
       disabled: {type: Boolean, default: false},
       children: {type: Array},
-      onclick: {type: Function, default: () => {}},
+      wholeRow: {type: Boolean, default: false},
+      onClick: {
+        type: Function, default: () => {}
+      },
+      onToggle: {
+        type: Function, default: () => {}
+      },
       showCheckbox: {type: Boolean, default: false},
+      loading: {type: Boolean, default: false},
       height: {type: Number, default: ITEM_HEIGHT_DEFAULT},
       klass: String
     },
     data () {
       return {
-        open: this.opend
+        open: this.opened,
+        hover: false
       }
     },
     computed: {
@@ -109,30 +123,63 @@
           {'tree-open': this.open},
           {'tree-closed': !this.open},
           {'tree-leaf': !this.isFolder},
+          {'tree-loading': this.loading},
           {[this.klass]: !!this.klass}
         ]
       },
-      anchorClass () {
+      anchorClasses () {
         return [
           {'tree-anchor': true},
           {'tree-disabled': this.disabled},
-          {'tree-clicked': this.selected}
+          {'tree-clicked': this.selected},
+          {'tree-hovered': this.hover}
+        ]
+      },
+      wholeRowClasses () {
+        return [
+          {'tree-wholerow': true},
+          {'tree-wholerow-clicked': this.selected},
+          {'tree-wholerow-hovered': this.hover}
+        ]
+      },
+      themeIconClasses () {
+        return [
+          {'tree-icon': true},
+          {'tree-themeicon': true},
+          {[this.icon]: !!this.icon},
+          {'jstree-themeicon-custom': !!this.icon}
         ]
       },
       isFolder () {
         return this.children &&
                 this.children.length
+      },
+      isWholeRow () {
+        if (this.wholeRow) {
+          if (this.$parent.open === undefined) {
+            return true
+          } else if (this.$parent.open === true) {
+            return true
+          } else {
+            return false
+          }
+        }
       }
     },
     watch: {
-      open () {
+      open (newValue) {
         this.handleSetGroupMaxHeight()
+        this.$emit('update:opened', newValue)
+      },
+      opened (newValue) {
+        this.open = newValue
       }
     },
     methods: {
       handleToggle () {
         if (this.isFolder) {
           this.open = !this.open
+          this.onToggle(this._self, this.open)
         }
       },
       handleGroupMaxHeight () {
@@ -167,11 +214,20 @@
       data: {type: Array},
       size: {type: String, validator: value => ['large', 'small'].indexOf(value) > -1},
       showCheckbox: {type: Boolean, default: false},
+      wholeRow: {type: Boolean, default: false},
+      noDots: {type: Boolean, default: false},
       multiple: {type: Boolean, default: false},
       allowBatch: {type: Boolean, default: false},
       textFieldName: {type: String, default: 'text'},
       valueFieldName: {type: String, default: 'value'},
+      async: {type: Function},
+      loadingText: {type: String, default: 'Loading...'},
       klass: String
+    },
+    data () {
+      return {
+        itemId: 1
+      }
     },
     computed: {
       classes () {
@@ -181,6 +237,14 @@
           {[`tree-default-${this.size}`]: !!this.size},
           {'tree-checkbox-selection': !!this.showCheckbox},
           {[this.klass]: !!this.klass}
+        ]
+      },
+      containerClasses () {
+        return [
+          {'tree-container-ul': true},
+          {'tree-children': true},
+          {'tree-wholerow-ul': !!this.wholeRow},
+          {'tree-no-dots': !!this.noDots}
         ]
       },
       sizeHight () {
@@ -195,21 +259,33 @@
       }
     },
     methods: {
-      initData (items) {
+      initializeData (items) {
         if (items && items.length > 0) {
           for (let item of items) {
-            item.id = item.id || ITEM_ID++
-            item[this.textFieldName] = item[this.textFieldName] || ''
-            item[this.valueFieldName] = item[this.valueFieldName] || ''
-            item.icon = item.icon || ''
-            item.opend = item.opend || false
-            item.selected = item.selected || false
-            item.disabled = item.disabled || false
-            item.children = item.children || []
-            item.onclick = node=> this.handleItemClick(node, item)
-            this.initData(item.children)
+            this.initializeDataItem(item)
+            this.initializeData(item.children)
           }
         }
+      },
+      initializeDataItem (item) {
+        item.id = item.id || this.itemId++
+        item[this.textFieldName] = item[this.textFieldName] || ''
+        item[this.valueFieldName] = item[this.valueFieldName] || item[this.textFieldName]
+        item.icon = item.icon || ''
+        item.opened = item.opened || false
+        item.selected = item.selected || false
+        item.disabled = item.disabled || false
+        item.children = item.children || []
+        item.onClick = node => this.handleItemClick(node, item)
+        item.onToggle = (node, state) => this.handleItemToggle(node, item, state)
+        return item
+      },
+      initializeLoading () {
+        return this.initializeDataItem({
+          text: this.loadingText,
+          disabled: true,
+          loading: true
+        })
       },
       handleSelectItems (selectedItem, data) {
         handleRecursionDataChilds(data, (items, item, i) => {
@@ -252,10 +328,35 @@
           this.handleSelectItems(item, this.data)
         }
         this.$emit('item-click', item, node)
+      },
+      handleItemToggle (node, item, state) {
+        if (state) {
+          item.opened = state
+          this.handleAsync(item.children, item)
+        }
+      },
+      handleAsync (parent, parentItem) {
+        if (this.async) {
+          var self = this
+          setTimeout(function () {
+            var asyncData = self.async(parentItem)
+            for (let i in asyncData) {
+              var asyncDataItem = self.initializeDataItem(asyncData[i])
+              asyncDataItem.children = [self.initializeLoading()]
+              Vue.set(parent, i, asyncDataItem)
+            }
+          }, 500)
+        }
       }
     },
     created () {
-      this.initData(this.data)
+      this.initializeData(this.data)
+    },
+    mounted () {
+      if (this.async) {
+        Vue.set(this.data, 0, this.initializeLoading())
+        this.handleAsync(this.data)
+      }
     }
   }
 </script>
