@@ -116,19 +116,19 @@
       children: {type: Array},
       wholeRow: {type: Boolean, default: false},
       onClick: {
-        type: Function, default: () => {}
+        type: Function, default: () => false
       },
       onToggle: {
-        type: Function, default: () => {}
+        type: Function, default: () => false
       },
       onDragStart: {
-        type: Function, default: () => {}
+        type: Function, default: () => false
       },
       onDragEnd: {
-        type: Function, default: () => {}
+        type: Function, default: () => false
       },
       onDrop: {
-        type: Function, default: () => {}
+        type: Function, default: () => false
       },
       showCheckbox: {type: Boolean, default: false},
       loading: {type: Boolean, default: false},
