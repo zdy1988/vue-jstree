@@ -1,5 +1,5 @@
 <template>
-  <div :class="classes" role="tree">
+  <div :class="classes" role="tree" onselectstart="return false">
     <ul :class="containerClasses" role="group">
       <item v-for="(child, index) in data"
             :key="index"
@@ -15,8 +15,13 @@
             :show-checkbox="showCheckbox"
             :loading="child.loading"
             :height="sizeHight"
+            :parent-item="data"
+            :draggable="draggable"
             :on-click="child.onClick"
             :on-toggle="child.onToggle"
+            :on-drag-start="child.onDragStart"
+            :on-drag-end="child.onDragEnd"
+            :on-drop="child.onDrop"
             :klass="index === data.length-1?'tree-last':''">
       </item>
     </ul>
@@ -52,7 +57,7 @@
     }
   }
 
-  function handleRecursionNodeParents(node, func) {
+  function handleRecursionNodeParents(node, func, stop) {
     if (node.$parent) {
       func(node.$parent)
       handleRecursionNodeParents(node.$parent, func)
@@ -61,14 +66,20 @@
 
   Vue.component('item', {
     template: `
-      <li role="treeitem" :class="classes">
+      <li role="treeitem" :class="classes" :draggable="draggable"
+          @dragstart.stop="onDragStart($event, _self)"
+          @dragend.stop.prevent="onDragEnd($event, _self)"
+          @dragover.stop.prevent="() => false"
+          @dragenter.stop.prevent="isDragEnter = true"
+          @dragleave.stop.prevent="isDragEnter = false"
+          @drop.stop.prevent="onDrop($event, _self)">
         <div role="presentation" :class="wholeRowClasses" v-if="isWholeRow">&nbsp;</div>
         <i class="tree-icon tree-ocl" role="presentation" @click="handleToggle"></i>
-        <a :class="anchorClasses" href="javascript:;" @click="onClick(_self)" @mouseover="hover=true" @mouseout="hover=false">
+        <div :class="anchorClasses" @click="onClick(_self)" @mouseover="hover=true" @mouseout="hover=false">
           <i class="tree-icon tree-checkbox" role="presentation" v-if="showCheckbox && !loading"></i>
           <i :class="themeIconClasses" role="presentation" v-if="!loading"></i>
           {{text}}
-        </a>
+        </div>
         <ul role="group" ref="group" class="tree-children" v-if="isFolder">
           <item v-for="(child, index) in children"
                   :key="index"
@@ -84,8 +95,13 @@
                   :show-checkbox="showCheckbox"
                   :loading="child.loading"
                   :height="height"
+                  :parent-item="children"
+                  :draggable="draggable"
                   :on-click="child.onClick"
-                  :on-toggle="child.onToggle">
+                  :on-toggle="child.onToggle"
+                  :on-drag-start="child.onDragStart"
+                  :on-drag-end="child.onDragEnd"
+                  :on-drop="child.onDrop">
             </item>
         </ul>
       </li>`,
@@ -105,15 +121,28 @@
       onToggle: {
         type: Function, default: () => {}
       },
+      onDragStart: {
+        type: Function, default: () => {}
+      },
+      onDragEnd: {
+        type: Function, default: () => {}
+      },
+      onDrop: {
+        type: Function, default: () => {}
+      },
       showCheckbox: {type: Boolean, default: false},
       loading: {type: Boolean, default: false},
       height: {type: Number, default: ITEM_HEIGHT_DEFAULT},
+      parentItem: {type: Array},
+      draggable: {type: Boolean, default: false},
       klass: String
     },
     data () {
       return {
         open: this.opened,
-        hover: false
+        hover: false,
+        isFolder: this.children && this.children.length,
+        isDragEnter: false
       }
     },
     computed: {
@@ -124,6 +153,7 @@
           {'tree-closed': !this.open},
           {'tree-leaf': !this.isFolder},
           {'tree-loading': this.loading},
+          {'tree-drag-enter': this.isDragEnter},
           {[this.klass]: !!this.klass}
         ]
       },
@@ -150,10 +180,6 @@
           {'jstree-themeicon-custom': !!this.icon}
         ]
       },
-      isFolder () {
-        return this.children &&
-                this.children.length
-      },
       isWholeRow () {
         if (this.wholeRow) {
           if (this.$parent.open === undefined) {
@@ -173,6 +199,9 @@
       },
       opened (newValue) {
         this.open = newValue
+      },
+      children (newValue) {
+        this.isFolder = newValue && newValue.length
       }
     },
     methods: {
@@ -197,10 +226,13 @@
         if (this.$refs.group) {
           this.$refs.group.style.maxHeight = this.handleGroupMaxHeight() + 'px'
         }
-        handleRecursionNodeParents(this, node => {
-          if (node.$refs.group) {
-            node.$refs.group.style.maxHeight = node.handleGroupMaxHeight() + 'px'
-          }
+        var self = this
+        this.$nextTick(() => {
+          handleRecursionNodeParents(self, node => {
+            if (node.$refs.group) {
+              node.$refs.group.style.maxHeight = node.handleGroupMaxHeight() + 'px'
+            }
+          })
         })
       }
     },
@@ -222,11 +254,13 @@
       valueFieldName: {type: String, default: 'value'},
       async: {type: Function},
       loadingText: {type: String, default: 'Loading...'},
+      draggable: {type: Boolean, default: false},
       klass: String
     },
     data () {
       return {
-        itemId: 1
+        itemId: 1,
+        draggedItem: null
       }
     },
     computed: {
@@ -278,6 +312,9 @@
         item.children = item.children || []
         item.onClick = node => this.handleItemClick(node, item)
         item.onToggle = (node, state) => this.handleItemToggle(node, item, state)
+        item.onDragStart = (e, node) => this.handleItemDragStart(e, item, node)
+        item.onDragEnd = (e, node) => this.handleItemDragEnd(e, item, node)
+        item.onDrop = (e, node) => this.handleItemDrop(e, item, node)
         return item
       },
       initializeLoading () {
@@ -287,7 +324,7 @@
           loading: true
         })
       },
-      handleSelectItems (selectedItem, data) {
+      handleSingleSelectItems (selectedItem, data) {
         handleRecursionDataChilds(data, (items, item, i) => {
           if (selectedItem === item) {
             item.selected = true
@@ -325,7 +362,7 @@
             this.handleMultipleSelectItems(item, this.data)
           }
         } else {
-          this.handleSelectItems(item, this.data)
+          this.handleSingleSelectItems(item, this.data)
         }
         this.$emit('item-click', item, node)
       },
@@ -346,6 +383,38 @@
               Vue.set(parent, i, asyncDataItem)
             }
           }, 500)
+        }
+      },
+      handleItemDragStart (e, item, node) {
+        if (!this.draggable)
+          return false
+        e.dataTransfer.effectAllowed = "move"
+        e.dataTransfer.setData('text', null)
+        this.draggedItem = {
+          item: item,
+          parentItem: node.parentItem,
+          index: node.parentItem.indexOf(item)
+        }
+      },
+      handleItemDragEnd (e, item, node) {
+        if (!this.draggable)
+          return false
+        this.draggedItem = null
+      },
+      handleItemDrop (e, item, node) {
+        if (!this.draggable)
+          return false
+        if (this.draggedItem) {
+          if (this.draggedItem.parentItem === item.children
+            || this.draggedItem.item === item
+            || item.children.indexOf(this.draggedItem.item) !== -1) {
+            return;
+          }
+          item.children = item.children.concat(this.draggedItem.item)
+          var self = this
+          this.$nextTick(() => {
+            self.draggedItem.parentItem.splice(self.draggedItem.index, 1)
+          })
         }
       }
     },

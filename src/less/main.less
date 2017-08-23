@@ -59,22 +59,6 @@
 	&.tree-rtl .tree-last { background:transparent; }
 }
 
-// mobile theme attempt
-@media (max-width: 768px) {
-	#tree-dnd.tree-dnd-responsive when (@responsive = true) {
-		line-height:@base-height; font-weight:bold; font-size:1.1em; text-shadow:1px 1px white;
-		> i { background:transparent; width:@base-height; height:@base-height; }
-		> .tree-ok { background-image:url("@{image-path}@{base-height}.png"); background-position:0 -(@base-height * 5); background-size:(@base-height * 3) (@base-height * 6); }
-		> .tree-er { background-image:url("@{image-path}@{base-height}.png"); background-position:-(@base-height * 1) -(@base-height * 5); background-size:(@base-height * 3) (@base-height * 6); }
-	}
-	#tree-marker.tree-dnd-responsive when (@responsive = true) {
-		border-left-width:10px;
-		border-top-width:10px;
-		border-bottom-width:10px;
-		margin-top:-10px;
-	}
-}
-
 .tree-@{theme-name}-responsive when (@responsive = true) {
 	@import "responsive.less";
 }

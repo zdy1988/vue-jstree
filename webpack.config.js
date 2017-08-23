@@ -6,7 +6,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '/dist/',
-    filename: 'vue-tree.js'
+    filename: 'build.js'
   },
   module: {
     rules: [

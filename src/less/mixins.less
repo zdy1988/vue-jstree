@@ -83,16 +83,6 @@
 
 	> .tree-container-ul > .tree-node { margin-left:0; margin-right:0; }
 
-	// drag'n'drop
-	#tree-dnd& {
-		line-height:@base-height; padding:0 4px;
-		.tree-ok,
-		.tree-er { background-image:url("@{image-path}32px.png"); background-repeat:no-repeat; background-color:transparent; }
-		i { background:transparent; width:@base-height; height:@base-height; line-height:@base-height; }
-		.tree-ok { background-position: -(@correction) -(@image-height * 2 + @correction); }
-		.tree-er { background-position: -(@image-height * 1 + @correction) -(@image-height * 2 + @correction); }
-	}
-
 	// ellipsis
 	.tree-ellipsis { overflow: hidden; }
 	// base height + PADDINGS!

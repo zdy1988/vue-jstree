@@ -19,6 +19,7 @@
 | valueFieldName | Boolean      |    'value' |
 | async | Function      |     |
 | loadingText | String      |    'Loading' |
+| draggable | Boolean      |    false |
 | klass | String      |     |
 
 ## Data Item Optional Properties
