@@ -141,7 +141,7 @@
       return {
         open: this.opened,
         hover: false,
-        isFolder: this.children && this.children.length,
+        isFolder: this.children && this.children.length > 0,
         isDragEnter: false
       }
     },
@@ -177,7 +177,7 @@
           {'tree-icon': true},
           {'tree-themeicon': true},
           {[this.icon]: !!this.icon},
-          {'jstree-themeicon-custom': !!this.icon}
+          {'tree-themeicon-custom': !!this.icon}
         ]
       },
       isWholeRow () {
@@ -201,7 +201,7 @@
         this.open = newValue
       },
       children (newValue) {
-        this.isFolder = newValue && newValue.length
+        this.isFolder = newValue && newValue.length > 0
       }
     },
     methods: {
