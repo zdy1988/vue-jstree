@@ -6,7 +6,7 @@
     <div>
       <div style="width:840px; margin: 0 auto;">
         <div style="width:49%; display:inline-block; vertical-align: top;">
-          <tree :data="data" show-checkbox multiple allow-batch whole-row draggable @item-click="itemClick" ref="tree"></tree>
+          <tree :data="data" show-checkbox multiple allow-batch whole-row @item-click="itemClick" ref="tree"></tree>
         </div>
         <div style="width:50%; display:inline-block;">
         <textarea  style="height:300px; width:100%;">

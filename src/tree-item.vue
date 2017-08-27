@@ -40,7 +40,6 @@
     name: 'TreeItem',
     props: {
       model: {type: Object, required: true},
-      multiple: {type: Boolean, default: false},
       wholeRow: {type: Boolean, default: false},
       showCheckbox: {type: Boolean, default: false},
       height: {type: Number, default: 24},
