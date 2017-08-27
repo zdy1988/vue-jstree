@@ -6,7 +6,7 @@
     <div>
       <div style="width:840px; margin: 0 auto;">
         <div style="width:49%; display:inline-block; vertical-align: top;">
-          <tree :data="data" show-checkbox multiple allow-batch whole-row @item-click="itemClick"></tree>
+          <tree :data="data" show-checkbox multiple allow-batch whole-row draggable @item-click="itemClick" ref="tree"></tree>
         </div>
         <div style="width:50%; display:inline-block;">
         <textarea  style="height:300px; width:100%;">
@@ -33,6 +33,7 @@
 
 <script>
   import Tree from './src/tree.vue'
+
   export default {
     name: 'app',
     data () {
@@ -41,7 +42,6 @@
         data: [
           {
             "text": "Same but with checkboxes",
-            "opened": true,
             "children": [
               {
                 "text": "initially selected",
@@ -110,22 +110,31 @@
           }
         ],
         asyncData: [],
-        loadData: (parent) => {
-          var tag = !!parent && !!parent.id ? parent.id : ''
-          return [
-            {
-              "text": "New Item 1..." + tag
-            },
-            {
-              "text": "New Item 2..." + tag
+        loadData: (oriNode, resolve) => {
+          var id = !!oriNode && !!oriNode.model ? oriNode.model.id : 0
+          setTimeout(() => {
+            let data = []
+            if (id > 20) {
+              data = []
             }
-          ]
+            else {
+              data = [
+                {
+                  "text": "New Item 1..." + id
+                },
+                {
+                  "text": "New Item 2..." + id
+                }
+              ]
+            }
+            resolve(data)
+          }, 500)
         }
       }
     },
     methods: {
-      itemClick (item) {
-        console.log(item.text + ' clicked !')
+      itemClick (node) {
+        console.log(node.model.text + ' clicked !')
       }
     },
     components: {

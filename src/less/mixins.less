@@ -31,7 +31,7 @@
 		&.tree-hovered {
 			background:transparent;
 		}
-		&.tree-clicked {
+		&.tree-selected {
 			background:#efefef;
 		}
 	}
@@ -41,7 +41,7 @@
 		&:hover { background-position:-(@image-height * 5 + @correction) -(@image-height * 1 + @correction); }
 	}
 
-	&.tree-checkbox-selection .tree-clicked, .tree-checked {
+	&.tree-checkbox-selection .tree-selected, .tree-checked {
 		> .tree-checkbox {
 			background-position:-(@image-height * 7 + @correction) -@correction;
 			&:hover { background-position:-(@image-height * 7 + @correction) -(@image-height * 1 + @correction); }
