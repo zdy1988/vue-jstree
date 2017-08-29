@@ -3,7 +3,7 @@
         <ul :class="containerClasses" role="group">
             <tree-item v-for="(child, index) in data"
                        :key="index"
-                       :model="child"
+                       :data="child"
                        :whole-row="wholeRow"
                        :show-checkbox="showCheckbox"
                        :height="sizeHight"
@@ -83,8 +83,8 @@
         if (items && items.length > 0) {
           for (let i in items) {
             var dataItem = this.initializeDataItem(items[i])
+            items[i] = dataItem
             this.initializeData(items[i].children)
-            this.$set(items, i, dataItem)
           }
         }
       },

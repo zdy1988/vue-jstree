@@ -18,7 +18,7 @@
         <ul role="group" ref="group" class="tree-children" v-if="isFolder">
             <tree-item v-for="(child, index) in model.children"
                        :key="index"
-                       :model="child"
+                       :data="child"
                        :whole-row="wholeRow"
                        :show-checkbox="showCheckbox"
                        :height= "height"
@@ -39,7 +39,7 @@
   export default {
     name: 'TreeItem',
     props: {
-      model: {type: Object, required: true},
+      data: {type: Object, required: true},
       wholeRow: {type: Boolean, default: false},
       showCheckbox: {type: Boolean, default: false},
       height: {type: Number, default: 24},
@@ -66,7 +66,7 @@
       return {
         isHover: false,
         isDragEnter: false,
-        child: this.model.children
+        model: this.data
       }
     },
     watch: {
@@ -76,8 +76,12 @@
         } else {
           this.$el.style.backgroundColor = "inherit"
         }
+      },
+      data (newValue) {
+        this.model = newValue
       }
-    },
+      }
+    ,
     computed: {
       isFolder () {
         return this.model.children && this.model.children.length
