@@ -6,7 +6,7 @@
     <div>
       <div style="width:840px; margin: 0 auto;">
         <div style="width:49%; display:inline-block; vertical-align: top;">
-          <tree :data="data" show-checkbox multiple allow-batch whole-row draggable @item-click="itemClick" ref="tree"></tree>
+          <vue-jstree :data="data" show-checkbox multiple allow-batch whole-row draggable @item-click="itemClick" ref="tree"></vue-jstree>
         </div>
         <div style="width:50%; display:inline-block;">
         <textarea  style="height:300px; width:100%;">
@@ -19,7 +19,7 @@
     <div>
       <div style="width:840px; margin: 0 auto;">
         <div style="width:49%; display:inline-block; vertical-align: top;">
-          <tree :data="asyncData" :async="loadData" show-checkbox multiple allow-batch whole-row @item-click="itemClick"></tree>
+          <vue-jstree :data="asyncData" :async="loadData" show-checkbox multiple allow-batch whole-row @item-click="itemClick"></vue-jstree>
         </div>
         <div style="width:50%; display:inline-block; vertical-align: top;">
         <textarea  style="height:300px; width:100%;">
@@ -32,8 +32,6 @@
 </template>
 
 <script>
-  import Tree from './src/tree.vue'
-
   export default {
     name: 'app',
     data () {
@@ -136,9 +134,6 @@
       itemClick (node) {
         console.log(node.model.text + ' clicked !')
       }
-    },
-    components: {
-      Tree
     }
   }
 </script>

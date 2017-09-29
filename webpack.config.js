@@ -2,11 +2,16 @@ var path = require('path')
 var webpack = require('webpack')
 
 module.exports = {
-  entry: './main.js',
+  //entry: './main.js',
+  entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, './dist'),
-    publicPath: '/dist/',
-    filename: 'build.js'
+    //publicPath: '/dist/',
+    publicPath: 'dist/',
+    filename: 'vue-jstree.js',
+    library: 'VueJstree',
+    libraryTarget: 'umd',
+    umdNamedDefine: true
   },
   module: {
     rules: [
@@ -28,7 +33,7 @@ module.exports = {
         test: /\.(png|jpg|gif|svg)$/,
         loader: 'file-loader',
         options: {
-          name: '[name].[ext]?[hash]'
+          name: '[name].[ext]'
         }
       },
       {

@@ -1,15 +1,20 @@
 {
-  "name": "vue-tree",
+  "name": "vue-jstree",
   "description": "a tree plugin for vue2",
   "version": "1.0.0",
   "author": "zdy1988 <virus_zhh@126.com>",
-  "private": true,
+  "private": false,
+  "license": "MIT",
+  "main": "dist/vue-jstree.js",
+  "repository": {
+    "type": "git",
+    "url":""
+  },
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {
-    "font-awesome": "^4.7.0",
     "vue": "^2.3.3"
   },
   "devDependencies": {
