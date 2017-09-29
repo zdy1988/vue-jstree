@@ -1,7 +1,7 @@
 import Vue from 'vue'
 
-import VueJstree from './src/index.js'
-Vue.use(VueJstree)
+import VJstree from './src/index.js'
+Vue.use(VJstree)
 
 import App from './App.vue'
 

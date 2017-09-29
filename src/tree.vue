@@ -28,7 +28,7 @@
   let ITEM_HEIGHT_LARGE = 32
 
   export default {
-    name: 'VueJstree',
+    name: 'VJstree',
     props: {
       data: {type: Array},
       size: {type: String, validator: value => ['large', 'small'].indexOf(value) > -1},
