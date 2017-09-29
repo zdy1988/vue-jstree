@@ -9,7 +9,7 @@ module.exports = {
     //publicPath: '/dist/',
     publicPath: 'dist/',
     filename: 'vue-jstree.js',
-    library: 'VueJstree',
+    library: 'vue-jstree',
     libraryTarget: 'umd',
     umdNamedDefine: true
   },
@@ -50,7 +50,7 @@ module.exports = {
   },
   resolve: {
     alias: {
-      'vue$': 'vue/dist/vue.esm.js'
+      'vue$': 'vue/dist/vue.js'
     }
   },
   devServer: {
