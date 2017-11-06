@@ -13,4 +13,4 @@ if (typeof window !== 'undefined' && window.Vue) {
   window.Vue.use(component);
 }
 
-export default component
+export default VJstree
