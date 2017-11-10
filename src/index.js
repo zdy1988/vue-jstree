@@ -3,14 +3,12 @@
  */
 import VJstree from './tree.vue'
 
-var component = {
-  install(Vue){
-    Vue.component(VJstree.name, VJstree)
-  }
+VJstree.install = function(Vue){
+  Vue.component(VJstree.name, VJstree)
 }
 
 if (typeof window !== 'undefined' && window.Vue) {
-  window.Vue.use(component);
+  window.Vue.use(VJstree);
 }
 
 export default VJstree
