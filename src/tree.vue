@@ -46,7 +46,8 @@
     },
     data () {
       return {
-        draggedItem: null
+        draggedItem: null,
+        draggedElm: null
       }
     },
     computed: {
@@ -100,7 +101,13 @@
           this.loading = item.loading || false
           this.children = item.children || []
         }
-        return new Model(item, this.textFieldName, this.valueFieldName)
+        let node = new Model(item, this.textFieldName, this.valueFieldName)
+        let self = this
+        node.addChild = function (data) {
+          let newItem = self.initializeDataItem(data)
+          node.children.push(newItem)
+        }
+        return node
       },
       initializeLoading () {
         var item = {}
@@ -169,6 +176,7 @@
           return false
         e.dataTransfer.effectAllowed = "move"
         e.dataTransfer.setData('text', null)
+        this.draggedElm = e.target
         this.draggedItem = {
           item: oriItem,
           parentItem: oriNode.parentItem,
@@ -183,6 +191,9 @@
       onItemDrop (e, oriNode, oriItem) {
         if (!this.draggable)
           return false
+        if (this.draggedElm === e.target || this.draggedElm.contains(e.target)) {
+          return
+        }
         if (this.draggedItem) {
           if (this.draggedItem.parentItem === oriItem.children
             || this.draggedItem.item === oriItem

@@ -79,9 +79,15 @@
       },
       data (newValue) {
         this.model = newValue
+      },
+      'model.opened': {
+        handler: function (val, oldVal) {
+          this.onItemToggle(this, this.model)
+          this.handleSetGroupMaxHeight()
+        },
+        deep: true
       }
-      }
-    ,
+    },
     computed: {
       isFolder () {
         return this.model.children && this.model.children.length
