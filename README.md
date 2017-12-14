@@ -1,6 +1,6 @@
 # vue-jstree
 
-a tree plugin for vue2
+A tree plugin for vue2
 
 ![tree](./pic.png)
 
@@ -120,9 +120,7 @@ a tree plugin for vue2
 ```
 
 ## API
-<style>
-.markdown-body table {display: inline-table;}
-</style>
+
 | Props        | Type           | Default  |
 | ------------- |:-------------:| -----:|
 | data      | Array |  |
