@@ -1,8 +1,12 @@
 # vue-jstree
 
-> a tree plugin for vue2
+a tree plugin for vue2
 
 ![tree](./pic.png)
+
+##  DEMO
+
+[http://zdy1988.github.io/vue-jstree](http://zdy1988.github.io/vue-jstree)
 
 ##  NPM
 
@@ -116,7 +120,9 @@
 ```
 
 ## API
-
+<style>
+.markdown-body table {display: inline-table;}
+</style>
 | Props        | Type           | Default  |
 | ------------- |:-------------:| -----:|
 | data      | Array |  |
@@ -141,7 +147,6 @@
 | opened | Boolean      |    false |
 | selected | Boolean      |    false |
 | disabled | Boolean      |    false |
-
 
 ## License
 
