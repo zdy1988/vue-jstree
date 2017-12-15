@@ -137,6 +137,12 @@ A tree plugin for vue2
 | draggable | Boolean      |    false |
 | klass | String      |     |
 
+## Event
+
+**@item-click**
+
+**@item-toggle**
+
 ## Data Item Optional Properties
 
 | Name        | Type           | Default  |

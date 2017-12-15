@@ -152,6 +152,7 @@
         if (oriNode.model.opened) {
           this.handleAsyncLoad(oriNode.model.children, oriNode, oriItem)
         }
+        this.$emit('item-toggle', oriNode, oriItem)
       },
       handleAsyncLoad (oriParent, oriNode, oriItem) {
         var self = this
