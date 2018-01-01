@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -149,13 +149,21 @@
     <div>
         <div style="width:840px; margin: 0 auto;">
             <div style="width:49%; display:inline-block; vertical-align: top;">
-                <v-jstree :data="asyncData" :async="loadData" show-checkbox multiple allow-batch whole-row @item-click="itemClick"></v-jstree>
+                <v-jstree :data="asyncData" :async="loadData" show-checkbox multiple allow-batch whole-row @item-click="itemClick" ref="tree2"></v-jstree>
             </div>
             <div style="width:50%; display:inline-block; vertical-align: top;">
         <textarea  style="height:300px; width:100%;">
           {{asyncData}}
         </textarea>
             </div>
+        </div>
+    </div>
+    <h2>Opreat</h2>
+    <div>
+        <div style="width:840px; margin: 0 auto; height: 300px;">
+            <button @click="refreshNode" >
+                refreshAsyncNode
+            </button>
         </div>
     </div>
 </div>
@@ -242,7 +250,7 @@
         var id = oriNode.data.id ? oriNode.data.id : 0
         setTimeout(function () {
           var data = []
-          if (id > 20) {
+          if (id > 200) {
             data = []
           }
           else {
@@ -294,6 +302,12 @@
           var index = this.editingNode.parentItem.indexOf(this.editingItem)
           this.editingNode.parentItem.splice(index, 1)
         }
+      },
+      refreshNode: function () {
+          this.asyncData = [
+              this.$refs.tree2.initializeLoading()
+          ]
+          this.$refs.tree2.handleAsyncLoad(this.asyncData, this.$refs.tree2)
       }
     }
   })
