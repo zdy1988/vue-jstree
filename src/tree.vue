@@ -202,9 +202,9 @@
             return;
           }
           oriItem.children = oriItem.children ?  oriItem.children.concat(this.draggedItem.item) : [this.draggedItem.item]
-          var self = this
+          var draggedItem = this.draggedItem
           this.$nextTick(() => {
-            self.draggedItem.parentItem.splice(self.draggedItem.index, 1)
+            draggedItem.parentItem.splice(draggedItem.index, 1)
           })
         }
       }
