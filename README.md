@@ -137,6 +137,16 @@ A tree plugin for vue2
 | draggable | Boolean      |    false |
 | klass | String      |     |
 
+## Methods in node.model
+
+| Method        | Params        |
+| ------------- |:-------------:|
+| addChild      | (object) newItem |
+| addAfter      | (object) newItem, (object) selectedItem |
+| addBefore     | (object) newItem, (object) selectedItem |
+| openChildren  |  |
+| closeChildren  |  |
+
 ## Event
 
 **@item-click**
