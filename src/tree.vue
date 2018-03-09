@@ -1,23 +1,23 @@
 <template>
-    <div :class="classes" role="tree" onselectstart="return false">
-        <ul :class="containerClasses" role="group">
-            <tree-item v-for="(child, index) in data"
-                       :key="index"
-                       :data="child"
-                       :whole-row="wholeRow"
-                       :show-checkbox="showCheckbox"
-                       :height="sizeHight"
-                       :parent-item="data"
-                       :draggable="draggable"
-                       :on-item-click="onItemClick"
-                       :on-item-toggle="onItemToggle"
-                       :on-item-drag-start="onItemDragStart"
-                       :on-item-drag-end="onItemDragEnd"
-                       :on-item-drop="onItemDrop"
-                       :klass="index === data.length-1?'tree-last':''">
-            </tree-item>
-        </ul>
-    </div>
+  <div :class="classes" role="tree" onselectstart="return false">
+    <ul :class="containerClasses" role="group">
+      <tree-item v-for="(child, index) in data"
+                 :key="index"
+                 :data="child"
+                 :whole-row="wholeRow"
+                 :show-checkbox="showCheckbox"
+                 :height="sizeHight"
+                 :parent-item="data"
+                 :draggable="draggable"
+                 :on-item-click="onItemClick"
+                 :on-item-toggle="onItemToggle"
+                 :on-item-drag-start="onItemDragStart"
+                 :on-item-drag-end="onItemDragEnd"
+                 :on-item-drop="onItemDrop"
+                 :klass="index === data.length-1?'tree-last':''">
+      </tree-item>
+    </ul>
+  </div>
 </template>
 <script>
   import TreeItem from './tree-item.vue'
@@ -44,14 +44,14 @@
       draggable: {type: Boolean, default: false},
       klass: String
     },
-    data () {
+    data() {
       return {
         draggedItem: null,
         draggedElm: null
       }
     },
     computed: {
-      classes () {
+      classes() {
         return [
           {'tree': true},
           {'tree-default': !this.size},
@@ -60,7 +60,7 @@
           {[this.klass]: !!this.klass}
         ]
       },
-      containerClasses () {
+      containerClasses() {
         return [
           {'tree-container-ul': true},
           {'tree-children': true},
@@ -68,7 +68,7 @@
           {'tree-no-dots': !!this.noDots}
         ]
       },
-      sizeHight () {
+      sizeHight() {
         switch (this.size) {
           case 'large':
             return ITEM_HEIGHT_LARGE
@@ -80,7 +80,7 @@
       }
     },
     methods: {
-      initializeData (items) {
+      initializeData(items) {
         if (items && items.length > 0) {
           for (let i in items) {
             var dataItem = this.initializeDataItem(items[i])
@@ -89,11 +89,11 @@
           }
         }
       },
-      initializeDataItem (item) {
+      initializeDataItem(item) {
         function Model(item, textFieldName, valueFieldName) {
           this.id = item.id || ITEM_ID++
-          this[textFieldName] = item[textFieldName] || ''
-          this[valueFieldName] = item[valueFieldName] || item[textFieldName]
+          this.textFieldName = item[textFieldName] || ''
+          this.valueFieldName = item[valueFieldName] || item[textFieldName]
           this.icon = item.icon || ''
           this.opened = item.opened || false
           this.selected = item.selected || false
@@ -101,22 +101,43 @@
           this.loading = item.loading || false
           this.children = item.children || []
         }
-        let node = new Model(item, this.textFieldName, this.valueFieldName)
+
+        let node = Object.assign(new Model(item, this.textFieldName, this.valueFieldName), item)
         let self = this
+        node.addBefore = function (data, selectedItem) {
+          let newItem = self.initializeDataItem(data)
+          let index = selectedItem.parentItem.indexOf(node)
+          selectedItem.parentItem.splice(index, 0, newItem)
+        }
+        node.addAfter = function (data, selectedItem) {
+          let newItem = self.initializeDataItem(data)
+          let index = selectedItem.parentItem.indexOf(node) + 1
+          selectedItem.parentItem.splice(index, 0, newItem)
+        }
         node.addChild = function (data) {
           let newItem = self.initializeDataItem(data)
           node.children.push(newItem)
         }
+        node.openChildren = function () {
+          self.handleRecursionNodeChildren(node, node => {
+            node.opened = true
+          })
+        }
+        node.closeChildren = function () {
+          self.handleRecursionNodeChildren(node, node => {
+            node.opened = false
+          })
+        }
         return node
       },
-      initializeLoading () {
+      initializeLoading() {
         var item = {}
         item[this.textFieldName] = this.loadingText
         item.disabled = true
         item.loading = true
         return this.initializeDataItem(item)
       },
-      handleRecursionNodeChilds (node, func) {
+      handleRecursionNodeChilds(node, func) {
         if (node.$children && node.$children.length > 0) {
           for (let childNode of node.$children) {
             if (!childNode.disabled) {
@@ -126,35 +147,43 @@
           }
         }
       },
-      onItemClick (oriNode, oriItem) {
+      handleRecursionNodeChildren(node, func) {
+        if (node.children && node.children.length > 0) {
+          for (let childNode of node.children) {
+              func(childNode)
+              this.handleRecursionNodeChildren(childNode, func)
+          }
+        }
+      },
+      onItemClick(oriNode, oriItem) {
         if (this.multiple) {
-            if (this.allowBatch) {
-                this.handleBatchSelectItems(oriNode, oriItem)
-            }
+          if (this.allowBatch) {
+            this.handleBatchSelectItems(oriNode, oriItem)
+          }
         } else {
           this.handleSingleSelectItems(oriNode, oriItem)
         }
         this.$emit('item-click', oriNode, oriItem)
       },
-      handleSingleSelectItems (oriNode, oriItem) {
+      handleSingleSelectItems(oriNode, oriItem) {
         this.handleRecursionNodeChilds(this, node => {
           node.model.selected = false
         })
         oriNode.model.selected = true
       },
-      handleBatchSelectItems (oriNode, oriItem) {
+      handleBatchSelectItems(oriNode, oriItem) {
         this.handleRecursionNodeChilds(oriNode, node => {
           if (node.model.disabled) return
           node.model.selected = oriNode.model.selected
         })
       },
-      onItemToggle (oriNode, oriItem) {
+      onItemToggle(oriNode, oriItem) {
         if (oriNode.model.opened) {
           this.handleAsyncLoad(oriNode.model.children, oriNode, oriItem)
         }
         this.$emit('item-toggle', oriNode, oriItem)
       },
-      handleAsyncLoad (oriParent, oriNode, oriItem) {
+      handleAsyncLoad(oriParent, oriNode, oriItem) {
         var self = this
         if (this.async) {
           if (oriParent[0].loading) {
@@ -172,7 +201,7 @@
           }
         }
       },
-      onItemDragStart (e, oriNode, oriItem) {
+      onItemDragStart(e, oriNode, oriItem) {
         if (!this.draggable)
           return false
         e.dataTransfer.effectAllowed = "move"
@@ -184,12 +213,12 @@
           index: oriNode.parentItem.indexOf(oriItem)
         }
       },
-      onItemDragEnd (e, oriNode, oriItem) {
+      onItemDragEnd(e, oriNode, oriItem) {
         if (!this.draggable)
           return false
         this.draggedItem = null
       },
-      onItemDrop (e, oriNode, oriItem) {
+      onItemDrop(e, oriNode, oriItem) {
         if (!this.draggable)
           return false
         if (this.draggedElm === e.target || this.draggedElm.contains(e.target)) {
@@ -201,7 +230,7 @@
             || (oriItem.children && oriItem.children.indexOf(this.draggedItem.item) !== -1)) {
             return;
           }
-          oriItem.children = oriItem.children ?  oriItem.children.concat(this.draggedItem.item) : [this.draggedItem.item]
+          oriItem.children = oriItem.children ? oriItem.children.concat(this.draggedItem.item) : [this.draggedItem.item]
           var draggedItem = this.draggedItem
           this.$nextTick(() => {
             draggedItem.parentItem.splice(draggedItem.index, 1)
@@ -209,10 +238,10 @@
         }
       }
     },
-    created () {
+    created() {
       this.initializeData(this.data)
     },
-    mounted () {
+    mounted() {
       if (this.async) {
         this.$set(this.data, 0, this.initializeLoading())
         this.handleAsyncLoad(this.data, this)
@@ -224,5 +253,5 @@
   }
 </script>
 <style lang="less">
-    @import "./less/style";
+  @import "./less/style";
 </style>
