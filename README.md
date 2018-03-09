@@ -141,9 +141,9 @@ A tree plugin for vue2
 
 | Method        | Params        |
 | ------------- |:-------------:|
-| addChild      | (object) newItem |
-| addAfter      | (object) newItem, (object) selectedItem |
-| addBefore     | (object) newItem, (object) selectedItem |
+| addChild      | (object) newDataItem |
+| addAfter      | (object) newDataItem, (object) selectedNode |
+| addBefore     | (object) newDataItem, (object) selectedNode |
 | openChildren  |  |
 | closeChildren  |  |
 

@@ -4,6 +4,8 @@
       <tree-item v-for="(child, index) in data"
                  :key="index"
                  :data="child"
+                 :text-field-name="textFieldName"
+                 :value-field-name="valueFieldName"
                  :whole-row="wholeRow"
                  :show-checkbox="showCheckbox"
                  :height="sizeHight"
@@ -92,8 +94,8 @@
       initializeDataItem(item) {
         function Model(item, textFieldName, valueFieldName) {
           this.id = item.id || ITEM_ID++
-          this.textFieldName = item[textFieldName] || ''
-          this.valueFieldName = item[valueFieldName] || item[textFieldName]
+          this[textFieldName] = item[textFieldName] || ''
+          this[valueFieldName] = item[valueFieldName] || item[textFieldName]
           this.icon = item.icon || ''
           this.opened = item.opened || false
           this.selected = item.selected || false
@@ -101,29 +103,30 @@
           this.loading = item.loading || false
           this.children = item.children || []
         }
-
         let node = Object.assign(new Model(item, this.textFieldName, this.valueFieldName), item)
         let self = this
-        node.addBefore = function (data, selectedItem) {
+        node.addBefore = function (data, selectedNode) {
           let newItem = self.initializeDataItem(data)
-          let index = selectedItem.parentItem.indexOf(node)
-          selectedItem.parentItem.splice(index, 0, newItem)
+          let index = selectedNode.parentItem.indexOf(node)
+          selectedNode.parentItem.splice(index, 0, newItem)
         }
-        node.addAfter = function (data, selectedItem) {
+        node.addAfter = function (data, selectedNode) {
           let newItem = self.initializeDataItem(data)
-          let index = selectedItem.parentItem.indexOf(node) + 1
-          selectedItem.parentItem.splice(index, 0, newItem)
+          let index = selectedNode.parentItem.indexOf(node) + 1
+          selectedNode.parentItem.splice(index, 0, newItem)
         }
         node.addChild = function (data) {
           let newItem = self.initializeDataItem(data)
           node.children.push(newItem)
         }
         node.openChildren = function () {
+          node.opened = true
           self.handleRecursionNodeChildren(node, node => {
             node.opened = true
           })
         }
         node.closeChildren = function () {
+          node.opened = false
           self.handleRecursionNodeChildren(node, node => {
             node.opened = false
           })

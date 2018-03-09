@@ -8,7 +8,7 @@
         <div style="width:49%; display:inline-block; vertical-align: top;">
           <p style="text-align:left">Search Text <input type="text" @keyup="inputKeyUp" v-model="searchText" /></p>
           <br>
-          <v-jstree :data="data" show-checkbox multiple allow-batch whole-row draggable @item-click="itemClick" ref="tree"></v-jstree>
+          <v-jstree :data="data" text-field-name="text" show-checkbox multiple allow-batch whole-row draggable @item-click="itemClick" ref="tree"></v-jstree>
         </div>
         <div style="width:50%; display:inline-block;">
         <textarea  style="height:300px; width:100%;">
@@ -48,14 +48,6 @@
           </tr>
           <tr>
             <td>
-              icon
-            </td>
-            <td>
-              <input v-model="editingItem.icon" />
-            </td>
-          </tr>
-          <tr>
-            <td>
               opened
             </td>
             <td>
@@ -82,6 +74,10 @@
            <td colspan="2">
              <button @click="addChildNode">add child node</button>
              <button @click="removeNode">remove this node</button>
+             <button @click="addBeforeNode">add child before node</button>
+             <button @click="addAfterNode">add child after node</button>
+             <button @click="openChildren">open child node</button>
+             <button @click="closeChildren">close child node</button>
            </td>
          </tr>
         </table>
@@ -182,6 +178,76 @@
             "text": "And wholerow selection"
           }
         ],
+        data2: [
+          {
+            "text2": "Same but with checkboxes",
+            "children": [
+              {
+                "text2": "initially selected",
+                "selected": true
+              },
+              {
+                "text2": "custom icon",
+                "icon": "fa fa-warning icon-state-danger"
+              },
+              {
+                "text2": "initially open",
+                "icon": "fa fa-folder icon-state-default",
+                "opened": true,
+                "children": [
+                  {
+                    "text2": "Another node"
+                  }
+                ]
+              },
+              {
+                "text2": "custom icon",
+                "icon": "fa fa-warning icon-state-warning"
+              },
+              {
+                "text2": "disabled node",
+                "icon": "fa fa-check icon-state-success",
+                "disabled": true
+              }
+            ]
+          },
+          {
+            "text2": "Same but with checkboxes",
+            "opened": true,
+            "children": [
+              {
+                "text2": "initially selected",
+                "selected": true
+              },
+              {
+                "text2": "custom icon",
+                "icon": "fa fa-warning icon-state-danger"
+              },
+              {
+                "text2": "initially open",
+                "icon": "fa fa-folder icon-state-default",
+                "opened": true,
+                "children": [
+                  {
+                    "text2": "Another node"
+                  }
+                ]
+              },
+              {
+                "text2": "custom icon",
+                "icon": "fa fa-warning icon-state-warning"
+              },
+              {
+                "text2": "disabled node",
+                "icon": "fa fa-check icon-state-success",
+                "disabled": true
+              }
+            ]
+          },
+          {
+            "text2": "And wholerow selection"
+          }
+        ],
         asyncData: [],
         loadData: (oriNode, resolve) => {
           var id = oriNode.data.id ? oriNode.data.id : 0
@@ -239,6 +305,32 @@
         if (this.editingItem.id !== undefined) {
           var index = this.editingNode.parentItem.indexOf(this.editingItem)
           this.editingNode.parentItem.splice(index, 1)
+        }
+      },
+      addBeforeNode: function () {
+        if (this.editingItem.id !== undefined) {
+          this.editingItem.addBefore({
+            text: "newNode",
+            value: "newNode"
+          }, this.editingNode)
+        }
+      },
+      addAfterNode: function () {
+        if (this.editingItem.id !== undefined) {
+          this.editingItem.addAfter({
+            text: "newNode",
+            value: "newNode"
+          }, this.editingNode)
+        }
+      },
+      openChildren: function () {
+        if (this.editingItem.id !== undefined) {
+          this.editingItem.openChildren()
+        }
+      },
+      closeChildren: function () {
+        if (this.editingItem.id !== undefined) {
+          this.editingItem.closeChildren()
         }
       }
     }

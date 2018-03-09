@@ -13,12 +13,14 @@
         <div :class="anchorClasses" @click="handleItemClick" @mouseover="isHover=true" @mouseout="isHover=false">
             <i class="tree-icon tree-checkbox" role="presentation" v-if="showCheckbox && !model.loading"></i>
             <i :class="themeIconClasses" role="presentation" v-if="!model.loading"></i>
-            <span v-html="model.valueFieldName"></span>
+            {{model[textFieldName]}}
         </div>
         <ul role="group" ref="group" class="tree-children" v-if="isFolder">
             <tree-item v-for="(child, index) in model.children"
                        :key="index"
                        :data="child"
+                       :text-field-name="textFieldName"
+                       :value-field-name="valueFieldName"
                        :whole-row="wholeRow"
                        :show-checkbox="showCheckbox"
                        :height= "height"
@@ -40,6 +42,8 @@
     name: 'TreeItem',
     props: {
       data: {type: Object, required: true},
+      textFieldName: {type: String},
+      valueFieldName: {type: String},
       wholeRow: {type: Boolean, default: false},
       showCheckbox: {type: Boolean, default: false},
       height: {type: Number, default: 24},
