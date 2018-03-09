@@ -140,6 +140,10 @@
                     <td colspan="2">
                         <button @click="addChildNode">add child node</button>
                         <button @click="removeNode">remove this node</button>
+                        <button @click="addBeforeNode">add child before node</button>
+                        <button @click="addAfterNode">add child after node</button>
+                        <button @click="openChildren">open child node</button>
+                        <button @click="closeChildren">close child node</button>
                     </td>
                 </tr>
             </table>
@@ -268,47 +272,73 @@
       }
     },
     methods: {
-      itemClick: function (node) {
-        this.editingNode = node
-        this.editingItem = node.model
-        console.log(node.model.text + ' clicked !')
-      },
-      inputKeyUp: function () {
-        var text = this.searchText
-        const patt = new RegExp(text);
-        this.$refs.tree.handleRecursionNodeChilds(this.$refs.tree, function (node) {
-          if (text !== '') {
-            const str = node.model.text
-            if (patt.test(str)) {
-              node.$el.querySelector('.tree-anchor').style.color = 'red'
-            } else {
-              node.$el.querySelector('.tree-anchor').style.color = '#000'
-            } // or other operations
-          } else {
-            node.$el.querySelector('.tree-anchor').style.color = '#000'
-          }
-        })
-      },
-      addChildNode: function () {
-        if (this.editingItem.id !== undefined) {
-          this.editingItem.addChild({
-            text: "newNode",
-            value: "newNode"
-          })
+        itemClick: function (node) {
+            this.editingNode = node
+            this.editingItem = node.model
+            console.log(node.model.text + ' clicked !')
+        },
+        inputKeyUp: function () {
+            var text = this.searchText
+            const patt = new RegExp(text);
+            this.$refs.tree.handleRecursionNodeChilds(this.$refs.tree, function (node) {
+                if (text !== '') {
+                    const str = node.model.text
+                    if (patt.test(str)) {
+                        node.$el.querySelector('.tree-anchor').style.color = 'red'
+                    } else {
+                        node.$el.querySelector('.tree-anchor').style.color = '#000'
+                    } // or other operations
+                } else {
+                    node.$el.querySelector('.tree-anchor').style.color = '#000'
+                }
+            })
+        },
+        addChildNode: function () {
+            if (this.editingItem.id !== undefined) {
+                this.editingItem.addChild({
+                    text: "newNode",
+                    value: "newNode"
+                })
+            }
+        },
+        removeNode: function () {
+            if (this.editingItem.id !== undefined) {
+                var index = this.editingNode.parentItem.indexOf(this.editingItem)
+                this.editingNode.parentItem.splice(index, 1)
+            }
+        },
+        addBeforeNode: function () {
+            if (this.editingItem.id !== undefined) {
+                this.editingItem.addBefore({
+                    text: "newNode",
+                    value: "newNode"
+                }, this.editingNode)
+            }
+        },
+        addAfterNode: function () {
+            if (this.editingItem.id !== undefined) {
+                this.editingItem.addAfter({
+                    text: "newNode",
+                    value: "newNode"
+                }, this.editingNode)
+            }
+        },
+        openChildren: function () {
+            if (this.editingItem.id !== undefined) {
+                this.editingItem.openChildren()
+            }
+        },
+        closeChildren: function () {
+            if (this.editingItem.id !== undefined) {
+                this.editingItem.closeChildren()
+            }
+        },
+        refreshNode: function () {
+            this.asyncData = [
+                this.$refs.tree2.initializeLoading()
+            ]
+            this.$refs.tree2.handleAsyncLoad(this.asyncData, this.$refs.tree2)
         }
-      },
-      removeNode: function () {
-        if (this.editingItem.id !== undefined) {
-          var index = this.editingNode.parentItem.indexOf(this.editingItem)
-          this.editingNode.parentItem.splice(index, 1)
-        }
-      },
-      refreshNode: function () {
-          this.asyncData = [
-              this.$refs.tree2.initializeLoading()
-          ]
-          this.$refs.tree2.handleAsyncLoad(this.asyncData, this.$refs.tree2)
-      }
     }
   })
 </script>
