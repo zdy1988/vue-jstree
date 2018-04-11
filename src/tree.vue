@@ -264,6 +264,11 @@
         created() {
             this.initializeData(this.data)
         },
+        watch: {
+            data(nv) {
+                if (nv) this.initializeData(nv)
+            }
+        },
         mounted() {
             if (this.async) {
                 this.$set(this.data, 0, this.initializeLoading())

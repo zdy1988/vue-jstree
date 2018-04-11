@@ -130,6 +130,7 @@ A tree plugin for vue2
 | noDots | Boolean      |    false |
 | multiple | Boolean      |    false |
 | allowBatch | Boolean      |    false |
+| allowContextMenu | Boolean      |    false |
 | textFieldName | Boolean      |    'text' |
 | valueFieldName | Boolean      |    'value' |
 | async | Function      |     |
