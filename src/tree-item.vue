@@ -13,7 +13,7 @@
         <div
                 :class="anchorClasses"
                 @click="handleItemClick"
-                v-on="allowContextMenu && { contextmenu: handleContextMenu }"
+                v-on="allowContextMenu ? { contextmenu: handleContextMenu } : {}"
                 @mouseover="isHover=true"
                 @mouseout="isHover=false"
         >
@@ -206,7 +206,7 @@ export default {
         handleContextMenu($event) {
             $event.preventDefault()
             if (this.model.disabled) return
-            this.onContextMenu(this, this.model)
+            this.onContextMenu(this.model, $event)
         },
         handleItemDrop(e, oriNode, oriItem) {
             this.$el.style.backgroundColor = 'inherit'

@@ -180,8 +180,8 @@
                 }
                 this.$emit('item-click', oriNode, oriItem)
             },
-            onContextMenu(oriNode, oriItem) {
-                this.$emit('context-menu', oriNode, oriItem)
+            onContextMenu(oriNode, event) {
+                this.$emit('context-menu', oriNode, event)
             },
             handleSingleSelectItems(oriNode, oriItem) {
                 this.handleRecursionNodeChilds(this, node => {
