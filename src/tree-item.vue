@@ -62,7 +62,7 @@ export default {
         },
         onContextMenu: {
             type: Function,
-            //default: () => false,
+            default: () => false,
         },
         onItemToggle: {
             type: Function,
@@ -204,12 +204,8 @@ export default {
             this.onItemClick(this, this.model)
         },
         handleContextMenu($event) {
-            if (!this.onContextMenu) return
-
             $event.preventDefault()
-
             if (this.model.disabled) return
-            // this.model.selected = !this.model.selected
             this.onContextMenu(this, this.model)
         },
         handleItemDrop(e, oriNode, oriItem) {
