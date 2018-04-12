@@ -130,6 +130,7 @@ A tree plugin for vue2
 | noDots | Boolean      |    false |
 | multiple | Boolean      |    false |
 | allowBatch | Boolean      |    false |
+| allowContextMenu | Boolean      |    false |
 | textFieldName | Boolean      |    'text' |
 | valueFieldName | Boolean      |    'value' |
 | async | Function      |     |
@@ -153,6 +154,15 @@ A tree plugin for vue2
 
 **@item-toggle**
 
+**@context-menu**
+
+This event will be emitted when the `allow-context-menu` prop is supplied and the user context-clicks an item in the tree. It is up to the user to implement the context menu itself. 
+
+The event callback function will receive two arguments:
+- `model` - the data item from your array that was context-clicked
+- `event` - the window mouse-event
+
+
 ## Data Item Optional Properties
 
 | Name        | Type           | Default  |
@@ -161,6 +171,7 @@ A tree plugin for vue2
 | opened | Boolean      |    false |
 | selected | Boolean      |    false |
 | disabled | Boolean      |    false |
+
 
 ## License
 
