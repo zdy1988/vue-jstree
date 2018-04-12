@@ -6,6 +6,7 @@
                  :data="child"
                  :text-field-name="textFieldName"
                  :value-field-name="valueFieldName"
+                 :item-events="itemEvents"
                  :whole-row="wholeRow"
                  :show-checkbox="showCheckbox"
                  :height="sizeHight"
@@ -42,6 +43,9 @@
       allowBatch: {type: Boolean, default: false},
       textFieldName: {type: String, default: 'text'},
       valueFieldName: {type: String, default: 'value'},
+      itemEvents: {type: Object, default: function () {
+        return {}
+      }},
       async: {type: Function},
       loadingText: {type: String, default: 'Loading...'},
       draggable: {type: Boolean, default: false},

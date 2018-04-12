@@ -8,7 +8,7 @@
         <div style="width:49%; display:inline-block; vertical-align: top;">
           <p style="text-align:left">Search Text <input type="text" @keyup="inputKeyUp" v-model="searchText" /></p>
           <br>
-          <v-jstree :data="data" text-field-name="text" show-checkbox multiple allow-batch whole-row draggable @item-click="itemClick" ref="tree"></v-jstree>
+          <v-jstree :data="data" text-field-name="text" :item-events="itemEvents" show-checkbox multiple allow-batch whole-row draggable @item-click="itemClick" ref="tree"></v-jstree>
         </div>
         <div style="width:50%; display:inline-block;">
         <textarea  style="height:300px; width:100%;">
@@ -70,16 +70,16 @@
               <input type="checkbox" v-model="editingItem.disabled" />
             </td>
           </tr>
-         <tr>
-           <td colspan="2">
-             <button @click="addChildNode">add child node</button>
-             <button @click="removeNode">remove this node</button>
-             <button @click="addBeforeNode">add child before node</button>
-             <button @click="addAfterNode">add child after node</button>
-             <button @click="openChildren">open child node</button>
-             <button @click="closeChildren">close child node</button>
-           </td>
-         </tr>
+          <tr>
+            <td colspan="2">
+              <button @click="addChildNode">add child node</button>
+              <button @click="removeNode">remove this node</button>
+              <button @click="addBeforeNode">add child before node</button>
+              <button @click="addAfterNode">add child after node</button>
+              <button @click="openChildren">open child node</button>
+              <button @click="closeChildren">close child node</button>
+            </td>
+          </tr>
         </table>
       </div>
     </div>
@@ -108,6 +108,16 @@
         searchText: '',
         editingItem: {},
         editingNode: null,
+        itemEvents: {
+          mouseover: function () {
+            console.log('mouseover')
+          },
+          contextmenu: function () {
+            console.log(arguments[2])
+            arguments[2].preventDefault()
+            console.log('contextmenu')
+          }
+        },
         data: [
           {
             "text": "Same but with checkboxes",

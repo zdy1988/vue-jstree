@@ -121,21 +121,30 @@ A tree plugin for vue2
 
 ## API
 
-| Props        | Type           | Default  |
-| ------------- |:-------------:| -----:|
-| data      | Array |  |
-| size      | String      |   |
-| showCheckbox | Boolean      |    false |
-| wholeRow | Boolean      |    false |
-| noDots | Boolean      |    false |
-| multiple | Boolean      |    false |
-| allowBatch | Boolean      |    false |
-| textFieldName | Boolean      |    'text' |
-| valueFieldName | Boolean      |    'value' |
-| async | Function      |     |
-| loadingText | String      |    'Loading' |
-| draggable | Boolean      |    false |
-| klass | String      |     |
+| Props        | Type           | Default  |  Describe  |
+| ------------- |:-------------:|:-----:|-----:|
+| data      | Array |  |  set tree data  |
+| size      | String      |   |  set tree item size , value : 'large' or '' or ''small' |
+| showCheckbox | Boolean      |    false |   |
+| wholeRow | Boolean      |    false |   |
+| noDots | Boolean      |    false |  |
+| collapse | Boolean      |    true |  set all tree item collapse state |
+| multiple | Boolean      |    false |  set multiple selected tree item  |
+| allowBatch | Boolean      |    false |   |
+| textFieldName | String      |    'text' |  set tree item display field |
+| valueFieldName | String      |    'value' |  set tree item value field |
+| itemEvents | Object      |    {} |  register any event to tree item, example: itemEvents: {
+                                                                                          mouseover: function () {
+                                                                                            console.log('mouseover')
+                                                                                          },
+                                                                                          contextmenu: function () {
+                                                                                            console.log('contextmenu')
+                                                                                          }
+                                                                                        } |
+| async | Function      |     |  async load callback function  |
+| loadingText | String      |    'Loading' |  set loading text |
+| draggable | Boolean      |    false |  set tree item can be dragged |
+| klass | String      |     |  set append tree class |
 
 ## Methods in node.model
 
