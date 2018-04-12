@@ -37,6 +37,7 @@
       showCheckbox: {type: Boolean, default: false},
       wholeRow: {type: Boolean, default: false},
       noDots: {type: Boolean, default: false},
+      collapse: {type: Boolean, default: true},
       multiple: {type: Boolean, default: false},
       allowBatch: {type: Boolean, default: false},
       textFieldName: {type: String, default: 'text'},
@@ -92,18 +93,18 @@
         }
       },
       initializeDataItem(item) {
-        function Model(item, textFieldName, valueFieldName) {
+        function Model(item, textFieldName, valueFieldName, collapse) {
           this.id = item.id || ITEM_ID++
           this[textFieldName] = item[textFieldName] || ''
           this[valueFieldName] = item[valueFieldName] || item[textFieldName]
           this.icon = item.icon || ''
-          this.opened = item.opened || false
+          this.opened = item.opened || collapse
           this.selected = item.selected || false
           this.disabled = item.disabled || false
           this.loading = item.loading || false
           this.children = item.children || []
         }
-        let node = Object.assign(new Model(item, this.textFieldName, this.valueFieldName), item)
+        let node = Object.assign(new Model(item, this.textFieldName, this.valueFieldName, this.collapse), item)
         let self = this
         node.addBefore = function (data, selectedNode) {
           let newItem = self.initializeDataItem(data)
