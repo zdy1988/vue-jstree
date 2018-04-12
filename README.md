@@ -133,14 +133,7 @@ A tree plugin for vue2
 | allowBatch | Boolean      |    false |   |
 | textFieldName | String      |    'text' |  set tree item display field |
 | valueFieldName | String      |    'value' |  set tree item value field |
-| itemEvents | Object      |    {} |  register any event to tree item, example: itemEvents: {
-                                                                                          mouseover: function () {
-                                                                                            console.log('mouseover')
-                                                                                          },
-                                                                                          contextmenu: function () {
-                                                                                            console.log('contextmenu')
-                                                                                          }
-                                                                                        } |
+| itemEvents | Object      |    {} |  register any event to tree item, [example](https://github.com/zdy1988/vue-jstree/blob/master/App.vue)  |
 | async | Function      |     |  async load callback function  |
 | loadingText | String      |    'Loading' |  set loading text |
 | draggable | Boolean      |    false |  set tree item can be dragged |
