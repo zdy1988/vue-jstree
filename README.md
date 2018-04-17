@@ -128,7 +128,7 @@ A tree plugin for vue2
 | showCheckbox | Boolean      |    false |   |
 | wholeRow | Boolean      |    false |   |
 | noDots | Boolean      |    false |  |
-| collapse | Boolean      |    true |  set all tree item collapse state |
+| collapse | Boolean      |    false |  set all tree item collapse state |
 | multiple | Boolean      |    false |  set multiple selected tree item  |
 | allowBatch | Boolean      |    false |   |
 | textFieldName | String      |    'text' |  set tree item display field |

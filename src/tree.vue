@@ -38,7 +38,7 @@
       showCheckbox: {type: Boolean, default: false},
       wholeRow: {type: Boolean, default: false},
       noDots: {type: Boolean, default: false},
-      collapse: {type: Boolean, default: true},
+      collapse: {type: Boolean, default: false},
       multiple: {type: Boolean, default: false},
       allowBatch: {type: Boolean, default: false},
       textFieldName: {type: String, default: 'text'},
