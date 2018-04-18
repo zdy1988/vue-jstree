@@ -6,6 +6,7 @@
                  :data="child"
                  :text-field-name="textFieldName"
                  :value-field-name="valueFieldName"
+                 :children-field-name="childrenFieldName"
                  :item-events="itemEvents"
                  :whole-row="wholeRow"
                  :show-checkbox="showCheckbox"
@@ -43,6 +44,7 @@
       allowBatch: {type: Boolean, default: false},
       textFieldName: {type: String, default: 'text'},
       valueFieldName: {type: String, default: 'value'},
+      childrenFieldName: {type: String, default: 'children'},
       itemEvents: {type: Object, default: function () {
         return {}
       }},
@@ -92,12 +94,12 @@
           for (let i in items) {
             var dataItem = this.initializeDataItem(items[i])
             items[i] = dataItem
-            this.initializeData(items[i].children)
+            this.initializeData(items[i][this.childrenFieldName])
           }
         }
       },
       initializeDataItem(item) {
-        function Model(item, textFieldName, valueFieldName, collapse) {
+        function Model(item, textFieldName, valueFieldName, childrenFieldName, collapse) {
           this.id = item.id || ITEM_ID++
           this[textFieldName] = item[textFieldName] || ''
           this[valueFieldName] = item[valueFieldName] || item[textFieldName]
@@ -106,9 +108,9 @@
           this.selected = item.selected || false
           this.disabled = item.disabled || false
           this.loading = item.loading || false
-          this.children = item.children || []
+          this[childrenFieldName] = item[childrenFieldName] || []
         }
-        let node = Object.assign(new Model(item, this.textFieldName, this.valueFieldName, this.collapse), item)
+        let node = Object.assign(new Model(item, this.textFieldName, this.valueFieldName, this.childrenFieldName, this.collapse), item)
         let self = this
         node.addBefore = function (data, selectedNode) {
           let newItem = self.initializeDataItem(data)
@@ -122,7 +124,7 @@
         }
         node.addChild = function (data) {
           let newItem = self.initializeDataItem(data)
-          node.children.push(newItem)
+          node[this.childrenFieldName].push(newItem)
         }
         node.openChildren = function () {
           node.opened = true
@@ -156,8 +158,8 @@
         }
       },
       handleRecursionNodeChildren(node, func) {
-        if (node.children && node.children.length > 0) {
-          for (let childNode of node.children) {
+        if (node[this.childrenFieldName] && node[this.childrenFieldName].length > 0) {
+          for (let childNode of node[this.childrenFieldName]) {
               func(childNode)
               this.handleRecursionNodeChildren(childNode, func)
           }
@@ -187,7 +189,7 @@
       },
       onItemToggle(oriNode, oriItem) {
         if (oriNode.model.opened) {
-          this.handleAsyncLoad(oriNode.model.children, oriNode, oriItem)
+          this.handleAsyncLoad(oriNode.model[this.childrenFieldName], oriNode, oriItem)
         }
         this.$emit('item-toggle', oriNode, oriItem)
       },
@@ -199,15 +201,15 @@
               if (data.length > 0) {
                 for (let i in data) {
                   if (!data[i].isLeaf) {
-                    if (typeof data[i].children !== "object") {
-                      data[i].children = [self.initializeLoading()]
+                    if (typeof data[i][self.childrenFieldName] !== "object") {
+                      data[i][self.childrenFieldName] = [self.initializeLoading()]
                     }
                   }
                   var dataItem = self.initializeDataItem(data[i])
                   self.$set(oriParent, i, dataItem)
                 }
               } else {
-                oriNode.model.children = []
+                oriNode.model[self.childrenFieldName] = []
               }
             })
           }
@@ -237,12 +239,12 @@
           return
         }
         if (this.draggedItem) {
-          if (this.draggedItem.parentItem === oriItem.children
+          if (this.draggedItem.parentItem === oriItem[this.childrenFieldName]
             || this.draggedItem.item === oriItem
-            || (oriItem.children && oriItem.children.indexOf(this.draggedItem.item) !== -1)) {
+            || (oriItem[this.childrenFieldName] && oriItem[this.childrenFieldName].indexOf(this.draggedItem.item) !== -1)) {
             return;
           }
-          oriItem.children = oriItem.children ? oriItem.children.concat(this.draggedItem.item) : [this.draggedItem.item]
+          oriItem[this.childrenFieldName] = oriItem[this.childrenFieldName] ? oriItem[this.childrenFieldName].concat(this.draggedItem.item) : [this.draggedItem.item]
           var draggedItem = this.draggedItem
           this.$nextTick(() => {
             draggedItem.parentItem.splice(draggedItem.index, 1)

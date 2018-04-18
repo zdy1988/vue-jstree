@@ -13,19 +13,20 @@
         <div :class="anchorClasses" v-on="events">
             <i class="tree-icon tree-checkbox" role="presentation" v-if="showCheckbox && !model.loading"></i>
             <i :class="themeIconClasses" role="presentation" v-if="!model.loading"></i>
-            {{model[textFieldName]}}
+            <span v-html="model[textFieldName]"></span>
         </div>
         <ul role="group" ref="group" class="tree-children" v-if="isFolder">
-            <tree-item v-for="(child, index) in model.children"
+            <tree-item v-for="(child, index) in model[childrenFieldName]"
                        :key="index"
                        :data="child"
                        :text-field-name="textFieldName"
                        :value-field-name="valueFieldName"
+                       :children-field-name="childrenFieldName"
                        :item-events="itemEvents"
                        :whole-row="wholeRow"
                        :show-checkbox="showCheckbox"
                        :height= "height"
-                       :parent-item="model.children"
+                       :parent-item="model[childrenFieldName]"
                        :draggable="draggable"
                        :on-item-click="onItemClick"
                        :on-item-toggle="onItemToggle"
@@ -45,6 +46,7 @@
           data: {type: Object, required: true},
           textFieldName: {type: String},
           valueFieldName: {type: String},
+          childrenFieldName: {type: String},
           itemEvents: {type: Object},
           wholeRow: {type: Boolean, default: false},
           showCheckbox: {type: Boolean, default: false},
@@ -97,7 +99,7 @@
       },
       computed: {
           isFolder () {
-              return this.model.children && this.model.children.length
+              return this.model[this.childrenFieldName] && this.model[this.childrenFieldName].length
           },
           classes () {
               return [

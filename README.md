@@ -133,6 +133,7 @@ A tree plugin for vue2
 | allowBatch | Boolean      |    false |   |
 | textFieldName | String      |    'text' |  set tree item display field |
 | valueFieldName | String      |    'value' |  set tree item value field |
+| childrenFieldName | String      |    'children' |  set tree item children field |
 | itemEvents | Object      |    {} |  register any event to tree item, [example](https://github.com/zdy1988/vue-jstree/blob/master/App.vue)  |
 | async | Function      |     |  async load callback function , if node is a leaf ,you can set 'isLeaf: true' in data  |
 | loadingText | String      |    'Loading' |  set loading text |
