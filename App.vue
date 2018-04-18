@@ -263,16 +263,16 @@
           var id = oriNode.data.id ? oriNode.data.id : 0
           setTimeout(() => {
             let data = []
-            if (id > 20) {
+            if (id > 200) {
               data = []
             }
             else {
               data = [
                 {
-                  "text": "New Item 1..." + id
+                  "text": "New Item 1..." + id, "isLeaf": id > 100
                 },
                 {
-                  "text": "New Item 2..." + id
+                  "text": "New Item 2..." + id, "isLeaf": id > 100
                 }
               ]
             }

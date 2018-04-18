@@ -198,7 +198,11 @@
             this.async(oriNode, (data) => {
               if (data.length > 0) {
                 for (let i in data) {
-                  data[i].children = [self.initializeLoading()]
+                  if (!data[i].isLeaf) {
+                    if (typeof data[i].children !== "object") {
+                      data[i].children = [self.initializeLoading()]
+                    }
+                  }
                   var dataItem = self.initializeDataItem(data[i])
                   self.$set(oriParent, i, dataItem)
                 }

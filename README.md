@@ -122,7 +122,7 @@ A tree plugin for vue2
 ## API
 
 | Props        | Type           | Default  |  Describe  |
-| ------------- |:-------------:|:-----:|-----:|
+| ------------- |:-------------:|:-----:|:-----|
 | data      | Array |  |  set tree data  |
 | size      | String      |   |  set tree item size , value : 'large' or '' or ''small' |
 | showCheckbox | Boolean      |    false |   |
@@ -134,7 +134,7 @@ A tree plugin for vue2
 | textFieldName | String      |    'text' |  set tree item display field |
 | valueFieldName | String      |    'value' |  set tree item value field |
 | itemEvents | Object      |    {} |  register any event to tree item, [example](https://github.com/zdy1988/vue-jstree/blob/master/App.vue)  |
-| async | Function      |     |  async load callback function  |
+| async | Function      |     |  async load callback function , if node is a leaf ,you can set 'isLeaf: true' in data  |
 | loadingText | String      |    'Loading' |  set loading text |
 | draggable | Boolean      |    false |  set tree item can be dragged |
 | klass | String      |     |  set append tree class |
