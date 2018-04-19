@@ -5,6 +5,7 @@
     <title>vue-jstree</title>
     <script src="vue.min.js"></script>
     <script src="vue-jstree.js"></script>
+    <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <style>
         #app {
             font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -53,6 +54,18 @@
         table td {
             border: 1px solid #EEE;
             padding: 4px;
+        }
+        .icon-state-default {
+            color: gray;
+        }
+        .icon-state-danger {
+            color: red;
+        }
+        .icon-state-warning {
+            color: yellow;
+        }
+        .icon-state-success {
+            color: green;
         }
     </style>
 
@@ -216,9 +229,8 @@
                           "icon": "fa fa-warning icon-state-warning"
                       },
                       {
-                          "text": "disabled node",
-                          "icon": "fa fa-check icon-state-success",
-                          "disabled": true
+                          "text": "custom icon",
+                          "icon": "fa fa-check icon-state-success"
                       }
                   ]
               },
