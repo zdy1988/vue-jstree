@@ -216,8 +216,7 @@
         }
       },
       onItemDragStart(e, oriNode, oriItem) {
-        if (!this.draggable)
-          return false
+        if (!this.draggable || oriItem.dragDisabled) return false
         e.dataTransfer.effectAllowed = "move"
         e.dataTransfer.setData('text', null)
         this.draggedElm = e.target
@@ -228,12 +227,10 @@
         }
       },
       onItemDragEnd(e, oriNode, oriItem) {
-        if (!this.draggable)
-          return false
         this.draggedItem = null
       },
       onItemDrop(e, oriNode, oriItem) {
-        if (!this.draggable)
+        if (!this.draggable|| oriItem.dropDisabled)
           return false
         if (this.draggedElm === e.target || this.draggedElm.contains(e.target)) {
           return

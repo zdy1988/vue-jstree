@@ -122,7 +122,7 @@ A tree plugin for vue2
 ## API
 
 | Props        | Type           | Default  |  Describe  |
-| ------------- |:-------------:|:-----:|:-----|
+| ------------- |:-------------:|:-----:|:--------------------------------------------------------|
 | data      | Array |  |  set tree data  |
 | size      | String      |   |  set tree item size , value : 'large' or '' or ''small' |
 | showCheckbox | Boolean      |    false |   |
@@ -137,7 +137,7 @@ A tree plugin for vue2
 | itemEvents | Object      |    {} |  register any event to tree item, [example](https://github.com/zdy1988/vue-jstree/blob/master/App.vue)  |
 | async | Function      |     |  async load callback function , if node is a leaf ,you can set 'isLeaf: true' in data  |
 | loadingText | String      |    'Loading' |  set loading text |
-| draggable | Boolean      |    false |  set tree item can be dragged |
+| draggable | Boolean      |    false |  set tree item can be dragged , selective drag and drop can set 'dragDisabled: true' and 'dropDisabled: true' , all default value is 'false' |
 | klass | String      |     |  set append tree class |
 
 ## Methods in node.model
@@ -158,12 +158,15 @@ A tree plugin for vue2
 
 ## Data Item Optional Properties
 
-| Name        | Type           | Default  |
-| ------------- |:-------------:| -----:|
-| icon      | String      |   |
-| opened | Boolean      |    false |
-| selected | Boolean      |    false |
-| disabled | Boolean      |    false |
+| Name        | Type           | Default  | Describe  |
+| ------------- |:-------------:| -----:|:----------------------------------------------|
+| icon      | String      |   | custom icon css class |
+| opened | Boolean      |    false | set leaf opened |
+| selected | Boolean      |    false | set node selected |
+| disabled | Boolean      |    false | set node disabled |
+| isLeaf | Boolean      |    false | if node is a leaf , set true can hide '+' |
+| dragDisabled | Boolean      |    false |  selective drag|
+| dropDisabled | Boolean      |    false |  selective drop |
 
 ## License
 

@@ -186,6 +186,16 @@
           },
           {
             "text": "And wholerow selection"
+          },
+          {
+            "text": "drag disabled",
+            "icon": "fa fa-warning icon-state-danger",
+            "dragDisabled": true
+          },
+          {
+            "text": "drop disabled",
+            "icon": "fa fa-warning icon-state-danger",
+            "dropDisabled": true
           }
         ],
         data2: [

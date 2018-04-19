@@ -38,8 +38,6 @@
     </li>
 </template>
 <script>
-
-
   export default {
       name: 'TreeItem',
       props: {
