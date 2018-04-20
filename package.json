@@ -1,10 +1,6 @@
 {
   "name": "vue-jstree",
-<<<<<<< HEAD
   "version": "2.1.0",
-=======
-  "version": "1.2.0",
->>>>>>> afc54424b3198e525120be00f49e1e19ff836d21
   "description": "a tree plugin for vue2",
   "keywords": [
     "vue2",
