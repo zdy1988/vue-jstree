@@ -125,19 +125,20 @@ A tree plugin for vue2
 | ------------- |:-------------:|:-----:|:--------------------------------------------------------|
 | data      | Array |  |  set tree data  |
 | size      | String      |   |  set tree item size , value : 'large' or '' or ''small' |
-| showCheckbox | Boolean      |    false |   |
-| wholeRow | Boolean      |    false |   |
-| noDots | Boolean      |    false |  |
+| show-checkbox | Boolean      |    false |   |
+| whole-row | Boolean      |    false |   |
+| no-dots | Boolean      |    false |  |
 | collapse | Boolean      |    false |  set all tree item collapse state |
 | multiple | Boolean      |    false |  set multiple selected tree item  |
-| allowBatch | Boolean      |    false |   |
-| textFieldName | String      |    'text' |  set tree item display field |
-| valueFieldName | String      |    'value' |  set tree item value field |
-| childrenFieldName | String      |    'children' |  set tree item children field |
-| itemEvents | Object      |    {} |  register any event to tree item, [example](https://github.com/zdy1988/vue-jstree/blob/master/App.vue)  |
+| allow-batch | Boolean      |    false |   |
+| text-field-name | String      |    'text' |  set tree item display field |
+| value-field-name | String      |    'value' |  set tree item value field |
+| children-field-name | String      |    'children' |  set tree item children field |
+| item-events | Object      |    {} |  register any event to tree item, [example](https://github.com/zdy1988/vue-jstree/blob/master/App.vue)  |
 | async | Function      |     |  async load callback function , if node is a leaf ,you can set 'isLeaf: true' in data  |
-| loadingText | String      |    'Loading' |  set loading text |
+| loading-text | String      |    'Loading' |  set loading text |
 | draggable | Boolean      |    false |  set tree item can be dragged , selective drag and drop can set 'dragDisabled: true' and 'dropDisabled: true' , all default value is 'false' |
+| drag-over-background-color | String | '#C9FDC9' |  set drag over background color |
 | klass | String      |     |  set append tree class |
 
 ## Methods in node.model
@@ -152,9 +153,19 @@ A tree plugin for vue2
 
 ## Event
 
-**@item-click**
+**@item-click(node, item, e)**
 
-**@item-toggle**
+**@item-toggle(node, item, e)**
+
+**@item-drag-start(node, item, e)**
+
+**@item-drag-end(node, item, e)**
+
+**@item-drop(node, item, draggedItem, e)**
+
+**node** : current node vue object
+**item** : current node data item object
+**e** : event
 
 ## Data Item Optional Properties
 
@@ -165,7 +176,7 @@ A tree plugin for vue2
 | selected | Boolean      |    false | set node selected |
 | disabled | Boolean      |    false | set node disabled |
 | isLeaf | Boolean      |    false | if node is a leaf , set true can hide '+' |
-| dragDisabled | Boolean      |    false |  selective drag|
+| dragDisabled | Boolean      |    false |  selective drag |
 | dropDisabled | Boolean      |    false |  selective drop |
 
 ## License

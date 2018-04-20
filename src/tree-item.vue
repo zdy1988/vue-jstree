@@ -4,7 +4,7 @@
         :draggable="draggable"
         @dragstart.stop="onItemDragStart($event, _self, _self.model)"
         @dragend.stop.prevent="onItemDragEnd($event, _self, _self.model)"
-        @dragover.stop.prevent="() => false"
+        @dragover.stop.prevent="isDragEnter = true"
         @dragenter.stop.prevent="isDragEnter = true"
         @dragleave.stop.prevent="isDragEnter = false"
         @drop.stop.prevent="handleItemDrop($event, _self, _self.model)">
@@ -12,8 +12,10 @@
         <i class="tree-icon tree-ocl" role="presentation" @click="handleItemToggle"></i>
         <div :class="anchorClasses" v-on="events">
             <i class="tree-icon tree-checkbox" role="presentation" v-if="showCheckbox && !model.loading"></i>
-            <i :class="themeIconClasses" role="presentation" v-if="!model.loading"></i>
-            <span v-html="model[textFieldName]"></span>
+            <slot :vm="this" :model="model">
+                <i :class="themeIconClasses" role="presentation" v-if="!model.loading"></i>
+                <span v-html="model[textFieldName]"></span>
+            </slot>
         </div>
         <ul role="group" ref="group" class="tree-children" v-if="isFolder">
             <tree-item v-for="(child, index) in model[childrenFieldName]"
@@ -28,11 +30,18 @@
                        :height= "height"
                        :parent-item="model[childrenFieldName]"
                        :draggable="draggable"
+                       :drag-over-background-color="dragOverBackgroundColor"
                        :on-item-click="onItemClick"
                        :on-item-toggle="onItemToggle"
                        :on-item-drag-start="onItemDragStart"
                        :on-item-drag-end="onItemDragEnd"
                        :on-item-drop="onItemDrop">
+                <template slot-scope="_">
+                    <slot :vm="_.vm" :model="_.model">
+                        <i :class="_.vm.themeIconClasses" role="presentation" v-if="!model.loading"></i>
+                        <span v-html="_.model[textFieldName]"></span>
+                    </slot>
+                </template>
             </tree-item>
         </ul>
     </li>
@@ -51,6 +60,7 @@
           height: {type: Number, default: 24},
           parentItem: {type: Array},
           draggable: {type: Boolean, default: false},
+          dragOverBackgroundColor: {type: String},
           onItemClick: {
               type: Function, default: () => false
           },
@@ -79,7 +89,7 @@
       watch: {
           isDragEnter (newValue) {
               if (newValue) {
-                  this.$el.style.backgroundColor = "#C9FDC9"
+                  this.$el.style.backgroundColor = this.dragOverBackgroundColor
               } else {
                   this.$el.style.backgroundColor = "inherit"
               }
@@ -152,10 +162,10 @@
                   this.handleRecursionNodeParents(node.$parent, func)
               }
           },
-          handleItemToggle () {
+          handleItemToggle (e) {
               if (this.isFolder) {
                   this.model.opened = !this.model.opened
-                  this.onItemToggle(this, this.model)
+                  this.onItemToggle(this, this.model, e)
                   this.handleSetGroupMaxHeight()
               }
           },
@@ -183,10 +193,10 @@
                   })
               })
           },
-          handleItemClick () {
+          handleItemClick (e) {
               if (this.model.disabled) return
               this.model.selected = !this.model.selected
-              this.onItemClick(this, this.model)
+              this.onItemClick(this, this.model, e)
           },
           handleItemMouseOver () {
               this.isHover = true
