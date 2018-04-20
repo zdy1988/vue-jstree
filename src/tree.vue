@@ -13,12 +13,19 @@
                  :height="sizeHight"
                  :parent-item="data"
                  :draggable="draggable"
+                 :drag-over-background-color="dragOverBackgroundColor"
                  :on-item-click="onItemClick"
                  :on-item-toggle="onItemToggle"
                  :on-item-drag-start="onItemDragStart"
                  :on-item-drag-end="onItemDragEnd"
                  :on-item-drop="onItemDrop"
                  :klass="index === data.length-1?'tree-last':''">
+        <template slot-scope="_">
+          <slot :vm="_.vm" :model="_.model">
+            <i :class="_.vm.themeIconClasses" role="presentation" v-if="!_.model.loading"></i>
+            <span v-html="_.model[textFieldName]"></span>
+          </slot>
+        </template>
       </tree-item>
     </ul>
   </div>
@@ -51,6 +58,7 @@
       async: {type: Function},
       loadingText: {type: String, default: 'Loading...'},
       draggable: {type: Boolean, default: false},
+      dragOverBackgroundColor: {type: String, default: "#C9FDC9"},
       klass: String
     },
     data() {
@@ -165,7 +173,7 @@
           }
         }
       },
-      onItemClick(oriNode, oriItem) {
+      onItemClick(oriNode, oriItem, e) {
         if (this.multiple) {
           if (this.allowBatch) {
             this.handleBatchSelectItems(oriNode, oriItem)
@@ -173,7 +181,7 @@
         } else {
           this.handleSingleSelectItems(oriNode, oriItem)
         }
-        this.$emit('item-click', oriNode, oriItem)
+        this.$emit('item-click', oriNode, oriItem, e)
       },
       handleSingleSelectItems(oriNode, oriItem) {
         this.handleRecursionNodeChilds(this, node => {
@@ -187,11 +195,11 @@
           node.model.selected = oriNode.model.selected
         })
       },
-      onItemToggle(oriNode, oriItem) {
+      onItemToggle(oriNode, oriItem, e) {
         if (oriNode.model.opened) {
           this.handleAsyncLoad(oriNode.model[this.childrenFieldName], oriNode, oriItem)
         }
-        this.$emit('item-toggle', oriNode, oriItem)
+        this.$emit('item-toggle', oriNode, oriItem, e)
       },
       handleAsyncLoad(oriParent, oriNode, oriItem) {
         var self = this
@@ -225,9 +233,11 @@
           parentItem: oriNode.parentItem,
           index: oriNode.parentItem.indexOf(oriItem)
         }
+        this.$emit("item-drag-start", oriNode, oriItem, e)
       },
       onItemDragEnd(e, oriNode, oriItem) {
         this.draggedItem = null
+        this.$emit("item-drag-end", oriNode, oriItem, e)
       },
       onItemDrop(e, oriNode, oriItem) {
         if (!this.draggable|| oriItem.dropDisabled)
@@ -242,10 +252,12 @@
             return;
           }
           oriItem[this.childrenFieldName] = oriItem[this.childrenFieldName] ? oriItem[this.childrenFieldName].concat(this.draggedItem.item) : [this.draggedItem.item]
+          oriItem.opened = true
           var draggedItem = this.draggedItem
           this.$nextTick(() => {
             draggedItem.parentItem.splice(draggedItem.index, 1)
           })
+          this.$emit("item-drop", oriNode, oriItem, draggedItem.item, e)
         }
       }
     },
