@@ -35,7 +35,8 @@
                        :on-item-toggle="onItemToggle"
                        :on-item-drag-start="onItemDragStart"
                        :on-item-drag-end="onItemDragEnd"
-                       :on-item-drop="onItemDrop">
+                       :on-item-drop="onItemDrop"
+                       :klass="index === model[childrenFieldName].length-1?'tree-last':''">
                 <template slot-scope="_">
                     <slot :vm="_.vm" :model="_.model">
                         <i :class="_.vm.themeIconClasses" role="presentation" v-if="!model.loading"></i>
