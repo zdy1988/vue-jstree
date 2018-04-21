@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" style="padding-bottom: 300px;">
     <img src="./assets/logo.png">
     <h1>{{ msg }}</h1>
     <h2>Tree View</h2>
@@ -18,8 +18,14 @@
                     @item-click="itemClick"
                     @item-drag-start="itemDragStart"
                     @item-drag-end="itemDragEnd"
+                    @item-drop-before = "itemDropBefore"
                     @item-drop="itemDrop"
                     ref="tree"></v-jstree>
+
+          <br>
+          <span style="float: left; background-color: red; color: #fff; padding: 6px" draggable="true">
+            drag me to add new child !
+          </span>
         </div>
         <div style="width:50%; display:inline-block;">
         <textarea  style="height:300px; width:100%;">
@@ -98,11 +104,54 @@
     <div>
       <div style="width:840px; margin: 0 auto;">
         <div style="width:49%; display:inline-block; vertical-align: top;">
-          <v-jstree :data="asyncData" :async="loadData" show-checkbox multiple allow-batch whole-row @item-click="itemClick"></v-jstree>
+          <v-jstree :data="asyncData" :async="loadData" show-checkbox multiple allow-batch whole-row @item-click="itemClick" ref="tree2"></v-jstree>
         </div>
         <div style="width:50%; display:inline-block; vertical-align: top;">
         <textarea  style="height:300px; width:100%;">
           {{asyncData}}
+        </textarea>
+        </div>
+      </div>
+    </div>
+    <h2>Async Operation</h2>
+    <div>
+      <div style="width:840px; margin: 0 auto; height: 300px;">
+        <button @click="refreshNode" >
+          refreshAsyncNode
+        </button>
+      </div>
+    </div>
+    <h2>Custom Tree Item</h2>
+    <div>
+      <div style="width:840px; margin: 0 auto;">
+        <div style="width:49%; display:inline-block; vertical-align: top;">
+          <p style="text-align:left">Search Text <input type="text" @keyup="inputKeyUp" v-model="searchText" /></p>
+          <br>
+          <v-jstree :data="data"
+                    :item-events="itemEvents"
+                    show-checkbox
+                    multiple
+                    allow-batch
+                    whole-row
+                    draggable
+                    @item-click="itemClick"
+                    @item-drag-start="itemDragStart"
+                    @item-drag-end="itemDragEnd"
+                    @item-drop-before = "itemDropBefore"
+                    @item-drop="itemDrop"
+                    ref="tree">
+            <template slot-scope="_">
+              <div style="display: inherit; width: 200px" @click.ctrl="customItemClickWithCtrl">
+                <i :class="_.vm.themeIconClasses" role="presentation" v-if="!_.model.loading"></i>
+                {{_.model.text}}
+                <button style="border: 0px; background-color: transparent; cursor: pointer;" @click="customItemClick(_.vm, _.model, $event)"><i class="fa fa-remove"></i></button>
+              </div>
+            </template>
+          </v-jstree>
+        </div>
+        <div style="width:50%; display:inline-block;">
+        <textarea  style="height:300px; width:100%;">
+          {{data}}
         </textarea>
         </div>
       </div>
@@ -280,7 +329,7 @@
           }
         ],
         asyncData: [],
-        loadData: (oriNode, resolve) => {
+        loadData: function (oriNode, resolve) {
           var id = oriNode.data.id ? oriNode.data.id : 0
           setTimeout(() => {
             let data = []
@@ -313,6 +362,14 @@
       },
       itemDragEnd (node) {
         console.log(node.model.text + ' drag end !')
+      },
+      itemDropBefore (node, item, draggedItem , e) {
+        if (!draggedItem) {
+          item.addChild({
+            text: "newNode",
+            value: "newNode"
+          })
+        }
       },
       itemDrop (node, item) {
         var sortBy = function(attr,rev) {
@@ -391,6 +448,20 @@
         if (this.editingItem.id !== undefined) {
           this.editingItem.closeChildren()
         }
+      },
+      refreshNode: function () {
+        this.asyncData = [
+          this.$refs.tree2.initializeLoading()
+        ]
+        this.$refs.tree2.handleAsyncLoad(this.asyncData, this.$refs.tree2)
+      },
+      customItemClick: function (node ,item, e) {
+        e.stopPropagation()
+        var index = node.parentItem.indexOf(item)
+        node.parentItem.splice(index, 1)
+      },
+      customItemClickWithCtrl: function () {
+        console.log('click + ctrl')
       }
     }
   }

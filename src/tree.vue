@@ -63,8 +63,8 @@
     },
     data() {
       return {
-        draggedItem: null,
-        draggedElm: null
+        draggedItem: undefined,
+        draggedElm: undefined
       }
     },
     computed: {
@@ -132,7 +132,8 @@
         }
         node.addChild = function (data) {
           let newItem = self.initializeDataItem(data)
-          node[this.childrenFieldName].push(newItem)
+          node.opened = true
+          node[self.childrenFieldName].push(newItem)
         }
         node.openChildren = function () {
           node.opened = true
@@ -236,13 +237,15 @@
         this.$emit("item-drag-start", oriNode, oriItem, e)
       },
       onItemDragEnd(e, oriNode, oriItem) {
-        this.draggedItem = null
+        this.draggedItem = undefined
+        this.draggedElm = undefined
         this.$emit("item-drag-end", oriNode, oriItem, e)
       },
       onItemDrop(e, oriNode, oriItem) {
         if (!this.draggable|| oriItem.dropDisabled)
           return false
-        if (this.draggedElm === e.target || this.draggedElm.contains(e.target)) {
+        this.$emit("item-drop-before", oriNode, oriItem, !this.draggedItem ? undefined : this.draggedItem.item, e)
+        if (!this.draggedElm || this.draggedElm === e.target || this.draggedElm.contains(e.target)) {
           return
         }
         if (this.draggedItem) {

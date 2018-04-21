@@ -161,6 +161,8 @@ A tree plugin for vue2
 
 **@item-drag-end(node, item, e)**
 
+**@item-drop-before(node, item, draggedItem, e)**
+
 **@item-drop(node, item, draggedItem, e)**
 
 **node** : current node vue object
@@ -178,6 +180,22 @@ A tree plugin for vue2
 | isLeaf | Boolean      |    false | if node is a leaf , set true can hide '+' |
 | dragDisabled | Boolean      |    false |  selective drag |
 | dropDisabled | Boolean      |    false |  selective drop |
+
+## Custom Item Example
+
+```
+     <v-jstree :data="data">
+       <template scope="_">
+         <div style="display: inherit; width: 200px" @click.ctrl="customItemClickWithCtrl">
+           <i :class="_.vm.themeIconClasses" role="presentation" v-if="!_.model.loading"></i>
+           {{_.model.text}}
+           <button style="border: 0px; background-color: transparent; cursor: pointer;" @click="customItemClick(_.vm, _.model, $event)"><i class="fa fa-remove"></i></button>
+         </div>
+       </template>
+     </v-jstree>
+
+     **scope** be replaced in the **vue@2.5.0+** , over **vue@2.5.0+** use **slot-scope**
+```
 
 ## License
 
