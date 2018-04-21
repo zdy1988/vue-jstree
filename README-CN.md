@@ -1,12 +1,15 @@
 # vue-jstree
 
-[英文](./README.md)/[中文](./README-CN.md)
+[![npm](https://img.shields.io/npm/dt/vue-jstree.svg?style=flat-square)](https://github.com/zdy1988/vue-jstree)
 
-<img src="./pic.png" width="100%" align=center />
+
+[English(./README.md)/[中文](./README-CN.md)
 
 ##  Introduction
 
 A tree plugin for vue2
+
+<img src="./pic.png" width="100%" align=center />
 
 ##  DEMO
 
