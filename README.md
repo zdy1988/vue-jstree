@@ -2,7 +2,7 @@
 
 [![npm](https://img.shields.io/npm/dt/vue-jstree.svg?style=flat-square)](https://github.com/zdy1988/vue-jstree)
 
-[English(./README.md)/[中文](./README-CN.md)
+[English](./README.md)/[中文](./README-CN.md)
 
 ##  Introduction
 
