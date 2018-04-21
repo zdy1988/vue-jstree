@@ -127,25 +127,25 @@ A tree plugin for vue2
 
 | Props        | Type           | Default  |  Describe  |
 | ------------- |:-------------:|:-----:|:--------------------------------------------------------|
-| data      | Array |  |  set tree data  |
-| size      | String      |   |  set tree item size , value : 'large' or '' or ''small' |
-| show-checkbox | Boolean      |    false |   |
-| whole-row | Boolean      |    false |   |
-| no-dots | Boolean      |    false |  |
-| collapse | Boolean      |    false |  set all tree item collapse state |
-| multiple | Boolean      |    false |  set multiple selected tree item  |
-| allow-batch | Boolean      |    false |   |
-| text-field-name | String      |    'text' |  set tree item display field |
-| value-field-name | String      |    'value' |  set tree item value field |
-| children-field-name | String      |    'children' |  set tree item children field |
-| item-events | Object      |    {} |  register any event to tree item, [example](https://github.com/zdy1988/vue-jstree/blob/master/App.vue)  |
-| async | Function      |     |  async load callback function , if node is a leaf ,you can set 'isLeaf: true' in data  |
-| loading-text | String      |    'Loading' |  set loading text |
-| draggable | Boolean      |    false |  set tree item can be dragged , selective drag and drop can set 'dragDisabled: true' and 'dropDisabled: true' , all default value is 'false' |
-| drag-over-background-color | String | '#C9FDC9' |  set drag over background color |
-| klass | String      |     |  set append tree class |
+| data      | Array |  |  设置树的数据源  |
+| size      | String      |   |  设置树节点的大小, 可选值 : 'large' or '' or ''small' |
+| show-checkbox | Boolean      |    false |  设置是否显示选择框 |
+| whole-row | Boolean      |    false | 设置是否整个树节点高亮  |
+| no-dots | Boolean      |    false | 设置是否显示树节点前的虚线 |
+| collapse | Boolean      |    false |  设置节点全部展开或合并的初始值，不设置按节点自身的 opened 属性控制 |
+| multiple | Boolean      |    false |  设置是否可以多选  |
+| allow-batch | Boolean      |    false |  设置允许批量选择子节点 |
+| text-field-name | String      |    'text' |  设置 **文字** 的字段名称，默认为 **text** |
+| value-field-name | String      |    'value' |   设置 **值** 的字段名称，默认为 **value** |
+| children-field-name | String      |    'children' |  设置 **子节点** 的字段名称，默认为 **children** |
+| item-events | Object      |    {} |  注册任意事件到每个数节点上, [例子](https://github.com/zdy1988/vue-jstree/blob/master/App.vue)  |
+| async | Function      |     |  异步加载数据的回调函数 , 如果当前节点没有子项 ,设置树节点中的 'isLeaf: true' 可不现实 + 号 |
+| loading-text | String      |    'Loading' |  设置 Loading 文字 |
+| draggable | Boolean      |    false |  设置是否启用拖拽 , 默认全部节点可拖拽, 如自定义个别节点禁用拖拽或禁用拖放可设置 'dragDisabled: true' 和 'dropDisabled: true'|
+| drag-over-background-color | String | '#C9FDC9' |  设置拖拽进入节点时的背景色 |
+| klass | String      |     |  设置追加 class  |
 
-## Methods in node.model
+## node.model 中的方法
 
 | Method        | Params        |
 | ------------- |:-------------:|
@@ -155,7 +155,7 @@ A tree plugin for vue2
 | openChildren  |  |
 | closeChildren  |  |
 
-## Event
+## 可选择事件
 
 **@item-click(node, item, e)**
 
@@ -169,25 +169,25 @@ A tree plugin for vue2
 
 **@item-drop(node, item, draggedItem, e)**
 
-**node** : current node vue object
+**node** : 当前节点的 vue 对象
 
-**item** : current node data item object
+**item** : 当前节点的数据对象
 
-**e** : event
+**e** : 事件参数
 
-## Data Item Optional Properties
+## 节点的数据参数
 
 | Name        | Type           | Default  | Describe  |
 | ------------- |:-------------:| -----:|:----------------------------------------------|
-| icon      | String      |   | custom icon css class |
-| opened | Boolean      |    false | set leaf opened |
-| selected | Boolean      |    false | set node selected |
-| disabled | Boolean      |    false | set node disabled |
-| isLeaf | Boolean      |    false | if node is a leaf , set true can hide '+' |
-| dragDisabled | Boolean      |    false |  selective drag |
-| dropDisabled | Boolean      |    false |  selective drop |
+| icon      | String      |   | 自定义图标样式 class |
+| opened | Boolean      |    false | 设置节点展开或合并 |
+| selected | Boolean      |    false | 设置节点被选择 |
+| disabled | Boolean      |    false | 设置禁用节点 |
+| isLeaf | Boolean      |    false | 如果节点没有子项 , 设置为 true 可以隐藏 '+' |
+| dragDisabled | Boolean      |    false |  设置当前节点禁止拖拽 |
+| dropDisabled | Boolean      |    false |  设置当前节点禁止拖放 |
 
-## Custom Item Example
+## 自定义树节点的例子
 
 ```
      <v-jstree :data="data">
@@ -207,4 +207,4 @@ A tree plugin for vue2
 
 Licensed under the [MIT license](https://opensource.org/licenses/mit-license.php).
 
-Thanks For [jstree](https://github.com/vakata/jstree)'s UI
+感谢 [jstree](https://github.com/vakata/jstree) 的 样式支持
