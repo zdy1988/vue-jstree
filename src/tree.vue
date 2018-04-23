@@ -161,21 +161,17 @@
           if (node.$children && node.$children.length > 0) {
             for (let childNode of node.$children) {
               if (!childNode.disabled) {
-                if (func(childNode) !== false) {
-                  this.handleRecursionNodeChilds(childNode, func)
-                }
+                this.handleRecursionNodeChilds(childNode, func)
               }
             }
           }
         }
       },
       handleRecursionNodeChildren(node, func) {
-        if (func(node) !==false) {
+        if (func(node) !== false) {
           if (node[this.childrenFieldName] && node[this.childrenFieldName].length > 0) {
             for (let childNode of node[this.childrenFieldName]) {
-              if (func(childNode) !== false) {
-                this.handleRecursionNodeChildren(childNode, func)
-              }
+              this.handleRecursionNodeChildren(childNode, func)
             }
           }
         }
@@ -192,7 +188,7 @@
       },
       handleSingleSelectItems(oriNode, oriItem) {
         this.handleRecursionNodeChilds(this, node => {
-          node.model.selected = false
+          if (node.model) node.model.selected = false
         })
         oriNode.model.selected = true
       },

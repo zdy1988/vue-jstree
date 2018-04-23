@@ -125,8 +125,6 @@
     <div>
       <div style="width:840px; margin: 0 auto;">
         <div style="width:49%; display:inline-block; vertical-align: top;">
-          <p style="text-align:left">Search Text <input type="text" @keyup="inputKeyUp" v-model="searchText" /></p>
-          <br>
           <v-jstree :data="data"
                     :item-events="itemEvents"
                     show-checkbox
@@ -138,8 +136,7 @@
                     @item-drag-start="itemDragStart"
                     @item-drag-end="itemDragEnd"
                     @item-drop-before = "itemDropBefore"
-                    @item-drop="itemDrop"
-                    ref="tree">
+                    @item-drop="itemDrop">
             <template slot-scope="_">
               <div style="display: inherit; width: 200px" @click.ctrl="customItemClickWithCtrl">
                 <i :class="_.vm.themeIconClasses" role="presentation" v-if="!_.model.loading"></i>
@@ -397,7 +394,7 @@
         var text = this.searchText
         const patt = new RegExp(text);
         this.$refs.tree.handleRecursionNodeChilds(this.$refs.tree, function (node) {
-          if (text !== '') {
+          if (text !== '' && node.model !== undefined) {
             const str = node.model.text
             if (patt.test(str)) {
               node.$el.querySelector('.tree-anchor').style.color = 'red'
