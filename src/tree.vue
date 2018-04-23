@@ -157,20 +157,26 @@
         return this.initializeDataItem(item)
       },
       handleRecursionNodeChilds(node, func) {
-        if (node.$children && node.$children.length > 0) {
-          for (let childNode of node.$children) {
-            if (!childNode.disabled) {
-              func(childNode)
-              this.handleRecursionNodeChilds(childNode, func)
+        if (func(node) !== false) {
+          if (node.$children && node.$children.length > 0) {
+            for (let childNode of node.$children) {
+              if (!childNode.disabled) {
+                if (func(childNode) !== false) {
+                  this.handleRecursionNodeChilds(childNode, func)
+                }
+              }
             }
           }
         }
       },
       handleRecursionNodeChildren(node, func) {
-        if (node[this.childrenFieldName] && node[this.childrenFieldName].length > 0) {
-          for (let childNode of node[this.childrenFieldName]) {
-              func(childNode)
-              this.handleRecursionNodeChildren(childNode, func)
+        if (func(node) !==false) {
+          if (node[this.childrenFieldName] && node[this.childrenFieldName].length > 0) {
+            for (let childNode of node[this.childrenFieldName]) {
+              if (func(childNode) !== false) {
+                this.handleRecursionNodeChildren(childNode, func)
+              }
+            }
           }
         }
       },

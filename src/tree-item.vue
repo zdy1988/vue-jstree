@@ -17,7 +17,7 @@
                 <span v-html="model[textFieldName]"></span>
             </slot>
         </div>
-        <ul role="group" ref="group" class="tree-children" v-if="isFolder">
+        <ul role="group" ref="group" class="tree-children" v-if="isFolder" :style="{'position': model.opened ? 'initial' : 'relative'}">
             <tree-item v-for="(child, index) in model[childrenFieldName]"
                        :key="index"
                        :data="child"
@@ -159,8 +159,9 @@
       methods: {
           handleRecursionNodeParents(node, func) {
               if (node.$parent) {
-                  func(node.$parent)
-                  this.handleRecursionNodeParents(node.$parent, func)
+                  if (func(node.$parent) !== false) {
+                      this.handleRecursionNodeParents(node.$parent, func)
+                  }
               }
           },
           handleItemToggle (e) {
