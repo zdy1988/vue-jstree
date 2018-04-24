@@ -17,7 +17,7 @@
                 <span v-html="model[textFieldName]"></span>
             </slot>
         </div>
-        <ul role="group" ref="group" class="tree-children" v-if="isFolder" :style="{'position': model.opened ? 'initial' : 'relative'}">
+        <ul role="group" ref="group" class="tree-children" v-if="isFolder" :style="groupStyle">
             <tree-item v-for="(child, index) in model[childrenFieldName]"
                        :key="index"
                        :data="child"
@@ -27,6 +27,7 @@
                        :item-events="itemEvents"
                        :whole-row="wholeRow"
                        :show-checkbox="showCheckbox"
+                       :allow-transition="allowTransition"
                        :height= "height"
                        :parent-item="model[childrenFieldName]"
                        :draggable="draggable"
@@ -58,6 +59,7 @@
           itemEvents: {type: Object},
           wholeRow: {type: Boolean, default: false},
           showCheckbox: {type: Boolean, default: false},
+          allowTransition: {type: Boolean, default: true},
           height: {type: Number, default: 24},
           parentItem: {type: Array},
           draggable: {type: Boolean, default: false},
@@ -84,6 +86,7 @@
               isHover: false,
               isDragEnter: false,
               model: this.data,
+              maxHeight: 0,
               events: {}
           }
       },
@@ -100,8 +103,10 @@
           },
           'model.opened': {
               handler: function (val, oldVal) {
-                  this.onItemToggle(this, this.model)
-                  this.handleSetGroupMaxHeight()
+                  if (val !== oldVal) {
+                      this.onItemToggle(this, this.model)
+                      this.handleGroupMaxHeight()
+                  }
               },
               deep: true
           }
@@ -154,21 +159,22 @@
                       return false
                   }
               }
+          },
+          groupStyle () {
+              return {
+                  'position': this.model.opened ? 'initial' : 'relative',
+                  'max-height': !!this.allowTransition ? this.maxHeight + 'px' : 'none',
+                  'transition-duration': !!this.allowTransition ? Math.ceil(this.model[this.childrenFieldName].length / 100) * 300 + 'ms' : 'none',
+                  'transition-property': !!this.allowTransition ? 'max-height' : 'none',
+                  'display': !!this.allowTransition ? 'block' : (this.model.opened ? 'block' : 'none')
+              }
           }
       },
       methods: {
-          handleRecursionNodeParents(node, func) {
-              if (node.$parent) {
-                  if (func(node.$parent) !== false) {
-                      this.handleRecursionNodeParents(node.$parent, func)
-                  }
-              }
-          },
           handleItemToggle (e) {
               if (this.isFolder) {
                   this.model.opened = !this.model.opened
-                  this.onItemToggle(this, this.model, e)
-                  this.handleSetGroupMaxHeight()
+                  this.onItemToggle(this, this.model)
               }
           },
           handleGroupMaxHeight () {
@@ -177,23 +183,13 @@
               if (this.model.opened) {
                   length = this.$children.length
                   for (let children of this.$children) {
-                      childHeight += children.handleGroupMaxHeight()
+                      childHeight += children.maxHeight
                   }
               }
-              return length * this.height + childHeight
-          },
-          handleSetGroupMaxHeight () {
-              if (this.$refs.group) {
-                  this.$refs.group.style.maxHeight = this.handleGroupMaxHeight() + 'px'
+              this.maxHeight = length * this.height + childHeight
+              if (this.$parent.$options._componentTag === 'tree-item') {
+                  this.$parent.handleGroupMaxHeight()
               }
-              var self = this
-              this.$nextTick(() => {
-                  this.handleRecursionNodeParents(self, node => {
-                      if (node.$refs.group) {
-                          node.$refs.group.style.maxHeight = node.handleGroupMaxHeight() + 'px'
-                      }
-                  })
-              })
           },
           handleItemClick (e) {
               if (this.model.disabled) return
@@ -235,7 +231,7 @@
           this.events = events
       },
       mounted () {
-          this.handleSetGroupMaxHeight()
+          this.handleGroupMaxHeight()
       }
   }
 </script>

@@ -133,6 +133,7 @@ A tree plugin for vue2
 | data      | Array |  |  设置树的数据源  |
 | size      | String      |   |  设置树节点的大小, 可选值 : 'large' or '' or ''small' |
 | show-checkbox | Boolean      |    false |  设置是否显示选择框 |
+| allow-transition | Boolean      |    true | 设置是否允许使用过渡效果  |
 | whole-row | Boolean      |    false | 设置是否整个树节点高亮  |
 | no-dots | Boolean      |    false | 设置是否显示树节点前的虚线 |
 | collapse | Boolean      |    false |  设置节点全部展开或合并的初始值，不设置按节点自身的 opened 属性控制 |

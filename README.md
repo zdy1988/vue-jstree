@@ -132,6 +132,7 @@ A tree plugin for vue2
 | data      | Array |  |  set tree data  |
 | size      | String      |   |  set tree item size , value : 'large' or '' or ''small' |
 | show-checkbox | Boolean      |    false |   |
+| allow-transition | Boolean      |    true |   |
 | whole-row | Boolean      |    false |   |
 | no-dots | Boolean      |    false |  |
 | collapse | Boolean      |    false |  set all tree item collapse state |
