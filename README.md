@@ -193,18 +193,32 @@ A tree plugin for vue2
 ## Custom Item Example
 
 ```
-     <v-jstree :data="data">
-       <template scope="_">
-         <div style="display: inherit; width: 200px" @click.ctrl="customItemClickWithCtrl">
-           <i :class="_.vm.themeIconClasses" role="presentation" v-if="!_.model.loading"></i>
-           {{_.model.text}}
-           <button style="border: 0px; background-color: transparent; cursor: pointer;" @click="customItemClick(_.vm, _.model, $event)"><i class="fa fa-remove"></i></button>
-         </div>
-       </template>
-     </v-jstree>
+<v-jstree :data="data">
+  <template scope="_">
+    <div style="display: inherit; width: 200px" @click.ctrl="customItemClickWithCtrl">
+      <i :class="_.vm.themeIconClasses" role="presentation" v-if="!_.model.loading"></i>
+      {{_.model.text}}
+      <button style="border: 0px; background-color: transparent; cursor: pointer;" @click="customItemClick(_.vm, _.model, $event)"><i class="fa fa-remove"></i></button>
+    </div>
+  </template>
+</v-jstree>
 
-     **scope** be replaced in the **vue@2.5.0+** , over **vue@2.5.0+** use **slot-scope**
 ```
+
+
+
+```
+<v-jstree :data="data">
+  <template scope="_">
+    <div style="display: inherit; width: 200px" @click.ctrl="customItemClickWithCtrl" @click.exact="customItemClick(_.vm, _.model, $event)">
+    <i :class="_.vm.themeIconClasses" role="presentation" v-if="!_.model.loading"></i>
+    {{_.model.text}}
+    </div>
+  </template>
+</v-jstree>
+```
+
+**scope** be replaced in the **vue@2.5.0+** , over **vue@2.5.0+** use **slot-scope**
 
 ## License
 

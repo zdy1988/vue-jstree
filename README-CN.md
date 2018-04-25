@@ -5,13 +5,13 @@
 
 [English](./README.md)/[中文](./README-CN.md)
 
-##  Introduction
+##  介绍
 
 A tree plugin for vue2
 
 <img src="./pic.png" width="100%" align=center />
 
-##  DEMO
+##  例子
 
 [http://zdy1988.github.io/vue-jstree](http://zdy1988.github.io/vue-jstree)
 
@@ -21,7 +21,7 @@ A tree plugin for vue2
     npm install vue-jstree
 ```
 
-##  ES6
+##  ES6	调用
 
 ```html
     import VJstree from 'vue-jstree'
@@ -33,14 +33,14 @@ A tree plugin for vue2
     })
 ```
 
-##  Setup
+##  安装
 
 ```html
     npm install
     npm run dev
 ```
 
-## Usage
+## 简单示例
 
 ```html
     <v-jstree :data="data" show-checkbox multiple allow-batch whole-row @item-click="itemClick"></v-jstree>
@@ -194,18 +194,31 @@ A tree plugin for vue2
 ## 自定义树节点的例子
 
 ```
-     <v-jstree :data="data">
-       <template scope="_">
-         <div style="display: inherit; width: 200px" @click.ctrl="customItemClickWithCtrl">
-           <i :class="_.vm.themeIconClasses" role="presentation" v-if="!_.model.loading"></i>
-           {{_.model.text}}
-           <button style="border: 0px; background-color: transparent; cursor: pointer;" @click="customItemClick(_.vm, _.model, $event)"><i class="fa fa-remove"></i></button>
-         </div>
-       </template>
-     </v-jstree>
-
-     **scope** be replaced in the **vue@2.5.0+** , over **vue@2.5.0+** use **slot-scope**
+<v-jstree :data="data">
+  <template scope="_">
+    <div style="display: inherit; width: 200px" @click.ctrl="customItemClickWithCtrl">
+      <i :class="_.vm.themeIconClasses" role="presentation" v-if="!_.model.loading"></i>
+      {{_.model.text}}
+      <button style="border: 0px; background-color: transparent; cursor: pointer;" @click="customItemClick(_.vm, _.model, $event)"><i class="fa fa-remove"></i></button>
+    </div>
+  </template>
+</v-jstree>
 ```
+	   
+更优雅的操作方式:
+
+```
+<v-jstree :data="data">
+  <template scope="_">
+    <div style="display: inherit; width: 200px" @click.ctrl="customItemClickWithCtrl" @click.exact="customItemClick(_.vm, _.model, $event)">
+    <i :class="_.vm.themeIconClasses" role="presentation" v-if="!_.model.loading"></i>
+    {{_.model.text}}
+    </div>
+  </template>
+</v-jstree>
+```
+
+**scope** 在 **vue@2.5.0+** 中被替换, **vue@2.5.0+** 以上的版本，请使用 **slot-scope**
 
 ## License
 
