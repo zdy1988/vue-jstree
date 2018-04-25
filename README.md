@@ -131,13 +131,13 @@ A tree plugin for vue2
 | ------------- |:-------------:|:-----:|:--------------------------------------------------------|
 | data      | Array |  |  set tree data  |
 | size      | String      |   |  set tree item size , value : 'large' or '' or ''small' |
-| show-checkbox | Boolean      |    false |   |
-| allow-transition | Boolean      |    true |   |
-| whole-row | Boolean      |    false |   |
-| no-dots | Boolean      |    false |  |
+| show-checkbox | Boolean      |    false |  set it show checkbox |
+| allow-transition | Boolean      |    true | allow use transition animation  |
+| whole-row | Boolean      |    false | use whole row state |
+| no-dots | Boolean      |    false | show or hide dots |
 | collapse | Boolean      |    false |  set all tree item collapse state |
 | multiple | Boolean      |    false |  set multiple selected tree item  |
-| allow-batch | Boolean      |    false |   |
+| allow-batch | Boolean      |    false | in multiple choices. allow batch select  |
 | text-field-name | String      |    'text' |  set tree item display field |
 | value-field-name | String      |    'value' |  set tree item value field |
 | children-field-name | String      |    'children' |  set tree item children field |
@@ -205,8 +205,8 @@ A tree plugin for vue2
 
 ```
 
-
-
+more elegant:
+							
 ```
 <v-jstree :data="data">
   <template scope="_">
