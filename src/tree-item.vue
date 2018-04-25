@@ -103,10 +103,8 @@
           },
           'model.opened': {
               handler: function (val, oldVal) {
-                  if (val !== oldVal) {
-                      this.onItemToggle(this, this.model)
-                      this.handleGroupMaxHeight()
-                  }
+                  this.onItemToggle(this, this.model)
+                  this.handleGroupMaxHeight()
               },
               deep: true
           }
@@ -162,10 +160,10 @@
           },
           groupStyle () {
               return {
-                  'position': this.model.opened ? 'initial' : 'relative',
-                  'max-height': !!this.allowTransition ? this.maxHeight + 'px' : 'none',
-                  'transition-duration': !!this.allowTransition ? Math.ceil(this.model[this.childrenFieldName].length / 100) * 300 + 'ms' : 'none',
-                  'transition-property': !!this.allowTransition ? 'max-height' : 'none',
+                  'position': this.model.opened ? '' : 'relative',
+                  'max-height': !!this.allowTransition ? this.maxHeight + 'px' : '',
+                  'transition-duration': !!this.allowTransition ? Math.ceil(this.model[this.childrenFieldName].length / 100) * 300 + 'ms' : '',
+                  'transition-property': !!this.allowTransition ? 'max-height' : '',
                   'display': !!this.allowTransition ? 'block' : (this.model.opened ? 'block' : 'none')
               }
           }
@@ -178,17 +176,19 @@
               }
           },
           handleGroupMaxHeight () {
-              let length = 0
-              let childHeight = 0
-              if (this.model.opened) {
-                  length = this.$children.length
-                  for (let children of this.$children) {
-                      childHeight += children.maxHeight
+              if (!!this.allowTransition) {
+                  let length = 0
+                  let childHeight = 0
+                  if (this.model.opened) {
+                      length = this.$children.length
+                      for (let children of this.$children) {
+                          childHeight += children.maxHeight
+                      }
                   }
-              }
-              this.maxHeight = length * this.height + childHeight
-              if (this.$parent.$options._componentTag === 'tree-item') {
-                  this.$parent.handleGroupMaxHeight()
+                  this.maxHeight = length * this.height + childHeight
+                  if (this.$parent.$options._componentTag === 'tree-item') {
+                      this.$parent.handleGroupMaxHeight()
+                  }
               }
           },
           handleItemClick (e) {
