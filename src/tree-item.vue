@@ -172,7 +172,6 @@
           handleItemToggle (e) {
               if (this.isFolder) {
                   this.model.opened = !this.model.opened
-                  this.onItemToggle(this, this.model)
               }
           },
           handleGroupMaxHeight () {
