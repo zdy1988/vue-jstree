@@ -19,6 +19,9 @@
                        :on-item-toggle="onItemToggle"
                        :on-item-drag-start="onItemDragStart"
                        :on-item-drag-end="onItemDragEnd"
+                       :on-item-drag-over="onItemDragOver"
+                       :on-item-drag-enter="onItemDragEnter"
+                       :on-item-drag-leave="onItemDragLeave"
                        :on-item-drop="onItemDrop"
                        :klass="index === data.length-1?'tree-last':''">
                 <template slot-scope="_">
@@ -249,6 +252,15 @@
                 this.draggedItem = undefined
                 this.draggedElm = undefined
                 this.$emit("item-drag-end", oriNode, oriItem, e)
+            },
+            onItemDragOver(e, oriNode, oriItem) {
+                this.$emit("item-drag-over", oriNode, oriItem, e)
+            },
+            onItemDragEnter(e, oriNode, oriItem) {
+                this.$emit("item-drag-enter", oriNode, oriItem, e)
+            },
+            onItemDragLeave(e, oriNode, oriItem) {
+                this.$emit("item-drag-leave", oriNode, oriItem, e)
             },
             onItemDrop(e, oriNode, oriItem) {
                 if (!this.draggable || !!oriItem.dropDisabled)

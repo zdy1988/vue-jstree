@@ -4,9 +4,9 @@
         :draggable="draggable"
         @dragstart.stop="onItemDragStart($event, _self, _self.model)"
         @dragend.stop.prevent="onItemDragEnd($event, _self, _self.model)"
-        @dragover.stop.prevent="isDragEnter = true"
-        @dragenter.stop.prevent="isDragEnter = true"
-        @dragleave.stop.prevent="isDragEnter = false"
+        @dragover.stop.prevent="handleDragOver($event, _self, _self.model)"
+        @dragenter.stop.prevent="handleDragEnter($event, _self, _self.model)"
+        @dragleave.stop.prevent="handleDragLeave($event, _self, _self.model)"
         @drop.stop.prevent="handleItemDrop($event, _self, _self.model)">
         <div role="presentation" :class="wholeRowClasses" v-if="isWholeRow">&nbsp;</div>
         <i class="tree-icon tree-ocl" role="presentation" @click="handleItemToggle"></i>
@@ -36,6 +36,9 @@
                        :on-item-toggle="onItemToggle"
                        :on-item-drag-start="onItemDragStart"
                        :on-item-drag-end="onItemDragEnd"
+                       :on-item-drag-over="onItemDragOver"
+                       :on-item-drag-enter="onItemDragEnter"
+                       :on-item-drag-leave="onItemDragLeave"
                        :on-item-drop="onItemDrop"
                        :klass="index === model[childrenFieldName].length-1?'tree-last':''">
                 <template slot-scope="_">
@@ -74,6 +77,15 @@
               type: Function, default: () => false
           },
           onItemDragEnd: {
+              type: Function, default: () => false
+          },
+          onItemDragOver: {
+              type: Function, default: () => false
+          },
+          onItemDragEnter: {
+              type: Function, default: () => false
+          },
+          onItemDragLeave: {
               type: Function, default: () => false
           },
           onItemDrop: {
@@ -195,6 +207,18 @@
               if (this.model.disabled) return
               this.model.selected = !this.model.selected
               this.onItemClick(this, this.model, e)
+          },
+          handleDragOver (e, oriNode, oriItem) {
+              this.isDragEnter = true
+              this.onItemDragOver(e, oriNode, oriItem)
+          },
+          handleDragEnter (e, oriNode, oriItem) {
+              this.isDragEnter = true
+              this.onItemDragEnter(e, oriNode, oriItem)
+          },
+          handleDragLeave (e, oriNode, oriItem) {
+              this.isDragEnter = false
+              this.onItemDragLeave(e, oriNode, oriItem)
           },
           handleItemMouseOver () {
               this.isHover = true
