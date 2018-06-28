@@ -254,13 +254,13 @@
                 this.$emit("item-drag-end", oriNode, oriItem, e)
             },
             onItemDragOver(e, oriNode, oriItem) {
-                this.$emit("item-drag-over", oriNode, oriItem, e)
+                this.$emit("item-drag-over", oriNode, oriItem, !this.draggedItem ? undefined : this.draggedItem.item, e)
             },
             onItemDragEnter(e, oriNode, oriItem) {
-                this.$emit("item-drag-enter", oriNode, oriItem, e)
+                this.$emit("item-drag-enter", oriNode, oriItem, !this.draggedItem ? undefined : this.draggedItem.item, e)
             },
             onItemDragLeave(e, oriNode, oriItem) {
-                this.$emit("item-drag-leave", oriNode, oriItem, e)
+                this.$emit("item-drag-leave", oriNode, oriItem, !this.draggedItem ? undefined : this.draggedItem.item, e)
             },
             onItemDrop(e, oriNode, oriItem) {
                 if (!this.draggable || !!oriItem.dropDisabled)
