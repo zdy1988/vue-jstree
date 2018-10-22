@@ -1,0 +1,71 @@
+{
+  "_from": "vue-jstree",
+  "_id": "vue-jstree@2.1.6",
+  "_inBundle": false,
+  "_integrity": "sha512-vtUmhLbfE2JvcnYNRXauJPkNJSRO/f9BTsbxV+ESXP/mMQPVUIYI4EkSHKSEOxVDHTU7SfLp/AxplmaAl6ctcg==",
+  "_location": "/vue-jstree",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "vue-jstree",
+    "name": "vue-jstree",
+    "escapedName": "vue-jstree",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/vue-jstree/-/vue-jstree-2.1.6.tgz",
+  "_shasum": "44827ad72953ed77da6590ce4e8f37f7787f8653",
+  "_spec": "vue-jstree",
+  "_where": "/var/www/html/tkwcms",
+  "author": {
+    "name": "zdy1988",
+    "email": "virus_zhh@126.com"
+  },
+  "bugs": {
+    "url": "https://github.com/zdy1988/vue-jstree/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {},
+  "deprecated": false,
+  "description": "a tree plugin for vue2",
+  "devDependencies": {
+    "babel-core": "^6.0.0",
+    "babel-loader": "^6.0.0",
+    "babel-preset-env": "^1.5.1",
+    "cross-env": "^3.0.0",
+    "css-loader": "^0.25.0",
+    "file-loader": "^0.11.2",
+    "less": "^2.7.2",
+    "less-loader": "^4.0.5",
+    "style-loader": "^0.18.2",
+    "vue": "^2.3.3",
+    "vue-loader": "^12.1.0",
+    "vue-template-compiler": "^2.3.3",
+    "webpack": "^2.6.1",
+    "webpack-dev-server": "^2.4.5"
+  },
+  "homepage": "https://github.com/zdy1988/vue-jstree#readme",
+  "keywords": [
+    "vue2",
+    "tree"
+  ],
+  "license": "MIT",
+  "main": "dist/vue-jstree.js",
+  "name": "vue-jstree",
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zdy1988/vue-jstree.git"
+  },
+  "scripts": {
+    "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
+    "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot"
+  },
+  "version": "2.1.6"
+}
