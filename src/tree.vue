@@ -138,9 +138,7 @@
                 node.addChild = function (data) {
                     let newItem = self.initializeDataItem(data)
                     node.opened = true
-                    if (node[self.childrenFieldName] === null) {
-                        node[self.childrenFieldName] = []
-                    }
+                    if (node[self.childrenFieldName] === null) node[self.childrenFieldName] = []
                     node[self.childrenFieldName].push(newItem)
                 }
                 node.openChildren = function () {
