@@ -235,7 +235,7 @@
                 if (!this.draggable || oriItem.dragDisabled)
                     return false
                 e.dataTransfer.effectAllowed = "move"
-                e.dataTransfer.setData('text', null)
+                e.dataTransfer.setData('text', '')
                 this.draggedElm = e.target
                 this.draggedItem = {
                     item: oriItem,
