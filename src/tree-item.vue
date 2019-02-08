@@ -28,6 +28,7 @@
                        :whole-row="wholeRow"
                        :show-checkbox="showCheckbox"
                        :allow-transition="allowTransition"
+                       :allow-batch="allowBatch"
                        :height= "height"
                        :parent-item="model[childrenFieldName]"
                        :draggable="draggable"
@@ -37,7 +38,10 @@
                        :on-item-drag-start="onItemDragStart"
                        :on-item-drag-end="onItemDragEnd"
                        :on-item-drop="onItemDrop"
-                       :klass="index === model[childrenFieldName].length-1?'tree-last':''">
+                       :klass="index === model[childrenFieldName].length-1?'tree-last':''"
+                       @item-select-toggled="childItemSelectToggled"
+                       @deselectItem="deselectItem"
+                       @selectItem="selectItem">
                 <template slot-scope="_">
                     <slot :vm="_.vm" :model="_.model">
                         <i :class="_.vm.themeIconClasses" role="presentation" v-if="!model.loading"></i>
@@ -64,6 +68,8 @@
           parentItem: {type: Array},
           draggable: {type: Boolean, default: false},
           dragOverBackgroundColor: {type: String},
+          allowBatch: {type: Boolean},
+          semiCheck: {type: Boolean, default: true},
           onItemClick: {
               type: Function, default: () => false
           },
@@ -107,6 +113,18 @@
                   this.handleGroupMaxHeight()
               },
               deep: true
+          },
+          'model.selected': {
+              handler: function (val, oldVal) {
+                  if (this.allowBatch) {
+                      if (!val) {
+                          this.$emit('deselectItem')
+                      } else {
+                          this.$emit('selectItem');
+                      }
+                  }
+              },
+              deep: true
           }
       },
       computed: {
@@ -129,8 +147,13 @@
                   {'tree-anchor': true},
                   {'tree-disabled': this.model.disabled},
                   {'tree-selected': this.model.selected},
+                  {'tree-determined': this.semiCheck && !this.model.selected && this.isDetermined},
                   {'tree-hovered': this.isHover}
               ]
+          },
+          isDetermined () {
+              if (!this.semiCheck) return false;
+              return this.isItemDetermined(this.data);
           },
           wholeRowClasses () {
               return [
@@ -169,6 +192,41 @@
           }
       },
       methods: {
+          deselectItem () {
+              this.model.selected=false;
+          },
+          selectItem () {
+              if (this.allowBatch && this.model.children && this.model.children.length) {
+                  let isAllChildrenSelected = true;
+                  for (let child of this.model.children) {
+                      if (!child.selected) {
+                          isAllChildrenSelected = false;
+                          break;
+                      }
+                  }
+                  if (isAllChildrenSelected) this.model.selected = true;
+              }
+          },
+          childItemSelectToggled (item) {
+              if (this.allowBatch) {
+                  if (!item.selected && this.model.selected) {
+                      this.model.selected = false;
+                  }
+              }
+              this.$emit('item-select-toggled', this.model);
+          },
+          isItemDetermined (item) {
+              if (item && item.children && item.children.length) {
+                  for (let child of item.children) {
+                      if (child.selected) return true;
+                      if (child.children && child.children.length) {
+                          let isChildDetermined = this.isItemDetermined(child);
+                          if (isChildDetermined) return true;
+                      }
+                  }
+              }
+              return false;
+          },
           handleItemToggle (e) {
               if (this.isFolder) {
                   this.model.opened = !this.model.opened
@@ -195,6 +253,7 @@
               if (this.model.disabled) return
               this.model.selected = !this.model.selected
               this.onItemClick(this, this.model, e)
+              this.$emit('item-select-toggled', this.model);
           },
           handleItemMouseOver () {
               this.isHover = true

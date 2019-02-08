@@ -34,6 +34,9 @@
 		&.tree-selected {
 			background:#efefef;
 		}
+		&.tree-determined {
+			background:#efefef;
+		}
 	}
 
 	.tree-checkbox {
@@ -45,6 +48,12 @@
 		> .tree-checkbox {
 			background-position:-(@image-height * 7 + @correction) -@correction;
 			&:hover { background-position:-(@image-height * 7 + @correction) -(@image-height * 1 + @correction); }
+		}
+	}
+	&.tree-checkbox-selection .tree-determined, .tree-checked {
+		> .tree-checkbox {
+			background-position:-(@image-height * 6 + @correction) -@correction;
+			&:hover { background-position:-(@image-height * 6 + @correction) -(@image-height * 1 + @correction); }
 		}
 	}
 	.tree-anchor {
