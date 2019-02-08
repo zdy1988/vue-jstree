@@ -11,6 +11,8 @@
                        :whole-row="wholeRow"
                        :show-checkbox="showCheckbox"
                        :allow-transition="allowTransition"
+                       :allow-batch="allowBatch"
+                       :semiCheck="semiCheck"
                        :height="sizeHeight"
                        :parent-item="data"
                        :draggable="draggable"
@@ -54,6 +56,7 @@
             textFieldName: {type: String, default: 'text'},
             valueFieldName: {type: String, default: 'value'},
             childrenFieldName: {type: String, default: 'children'},
+            semiCheck: {type: Boolean, default: true},
             itemEvents: {
                 type: Object, default: function () {
                     return {}
