@@ -15,6 +15,7 @@
                               allow-batch
                               whole-row
                               draggable
+                              expand-timer
                               @item-click="itemClick"
                               @item-drag-start="itemDragStart"
                               @item-drag-end="itemDragEnd"

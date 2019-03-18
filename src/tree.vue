@@ -20,7 +20,9 @@
                        :on-item-drag-start="onItemDragStart"
                        :on-item-drag-end="onItemDragEnd"
                        :on-item-drop="onItemDrop"
-                       :klass="index === data.length-1?'tree-last':''">
+                       :klass="index === data.length-1?'tree-last':''"
+                       :expand-timer="expandTimer"
+            >
                 <template slot-scope="_">
                     <slot :vm="_.vm" :model="_.model">
                         <i :class="_.vm.themeIconClasses" role="presentation" v-if="!_.model.loading"></i>
@@ -63,7 +65,8 @@
             loadingText: {type: String, default: 'Loading...'},
             draggable: {type: Boolean, default: false},
             dragOverBackgroundColor: {type: String, default: "#C9FDC9"},
-            klass: String
+            klass: String,
+            expandTimer:{type: Boolean, default: false}
         },
         data() {
             return {

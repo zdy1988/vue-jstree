@@ -85,7 +85,8 @@
           onItemDrop: {
               type: Function, default: () => false
           },
-          klass: String
+          klass: String,
+          expandTimer:{type: Boolean, default: false}
       },
       data () {
           return {
@@ -178,7 +179,9 @@
       },
       methods: {
           expand () {
-              this.handleItemToggle();
+              if(this.expandTimer){
+                  this.handleItemToggle();
+              }
           },
           handleItemToggle (e) {
               if (this.isFolder) {
