@@ -42,7 +42,7 @@ A tree plugin for vue2
 ## Usage
 
 ```html
-    <v-jstree :data="data" expand-timer :expand-timer-time-out="5000" show-checkbox multiple allow-batch whole-row @item-click="itemClick"></v-jstree>
+    <v-jstree :data="data" expand-timer :expand-timer-time-out="5000" execute-sibling-movement show-checkbox multiple allow-batch whole-row @item-click="itemClick"></v-jstree>
     
     new Vue({
       data: {
@@ -149,6 +149,8 @@ A tree plugin for vue2
 | klass | String      |     |  set append tree class |
 | expand-timer | Boolean      | false |  prop to control expanding of nodes during dragOver |
 | expand-timer-time-out | Number | 1500 |  prop to control duration of expanding timer |
+| order-field-name | String |  |  prop to define atribute to rely upon at ordering nodes, if not defined - no additional ordering |
+| execute-siblings-movement | Boolean | false |  prop to control siblings movement: if true -> move node and emit event, false -> just emit event, and let user decide what to do with it |
 
 ## Methods in node.model
 
@@ -159,7 +161,8 @@ A tree plugin for vue2
 | addBefore     | (object) newDataItem, (object) selectedNode |
 | openChildren  |  |
 | closeChildren  |  |
-
+| moveLeftTo | (object)draggedItem, (object)anchorNode, oriIndex|
+| moveRightTo | (object)draggedItem, (object)anchorNode, oriIndex|
 ## Event
 
 **@item-click(node, item, e)**
@@ -179,6 +182,10 @@ A tree plugin for vue2
 **item** : current node data item object
 
 **e** : event
+
+**@item-drop-sibling-left**: move dragged node to left of target
+
+**@item-drop-sibling-right**: move dragged node to right of target
 
 ## Data Item Optional Properties
 
