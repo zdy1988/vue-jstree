@@ -3,14 +3,15 @@
         :class="classes"
         :draggable="draggable"
         @dragstart.stop="onItemDragStart($event, _self, _self.model)"
-        @dragend.stop.prevent="onItemDragEnd($event, _self, _self.model)"
-        @dragover.stop.prevent="isDragEnter = true"
-        @dragenter.stop.prevent="isDragEnter = true"
-        @dragleave.stop.prevent="isDragEnter = false"
+        @dragend.stop.prevent="onThisItemDragEnd($event, _self, _self.model)"
+        @dragover.stop.prevent="onItemDragOver($event, _self, _self.model)"
+        @dragenter.stop.prevent="onDragState(true)"
+        @dragleave.stop.prevent="onDragState(false)"
         @drop.stop.prevent="handleItemDrop($event, _self, _self.model)">
         <div role="presentation" :class="wholeRowClasses" v-if="isWholeRow">&nbsp;</div>
+        <div :class="dropCss"></div>
         <i class="tree-icon tree-ocl" role="presentation" @click="handleItemToggle"></i>
-        <div :class="anchorClasses" v-on="events">
+        <div :class="anchorClasses" @click.exact="handleItemClick" v-on="events">
             <i class="tree-icon tree-checkbox" role="presentation" v-if="showCheckbox && !model.loading"></i>
             <slot :vm="this" :model="model">
                 <i :class="themeIconClasses" role="presentation" v-if="!model.loading"></i>
@@ -53,6 +54,12 @@
 <script>
   import VueTimers from 'vue-timers/mixin';
   import { timer } from 'vue-timers'
+  const DropPosition = {
+      empty: '0',
+      up: '1',
+      inside: '2',
+      down: '3'
+  }
   export default {
       name: 'TreeItem',
       timers: {
@@ -84,29 +91,43 @@
           onItemDragEnd: {
               type: Function, default: () => false
           },
+          allowedToDrop: {
+              type: Function, default: () => true
+          },
           onItemDrop: {
               type: Function, default: () => false
           },
           klass: String,
           expandTimer:{type: Boolean, default: false},
-          expandTimerTimeOut:{type: Number, default: 1500}
+          expandTimerTimeOut:{type: Number, default: 1500},
+
       },
       data () {
           return {
               isHover: false,
               isDragEnter: false,
+              isSelected:false,
               model: this.data,
               maxHeight: 0,
-              events: {}
+              events: {},
+              dropPosition: '0',
+              dropCss: '',
           }
       },
       watch: {
           isDragEnter (newValue) {
               if (newValue) {
                   this.$el.style.backgroundColor = this.dragOverBackgroundColor
-                  this.$timer.start('expand');
+                  //this.$timer.start('expand');
               } else {
                   this.$el.style.backgroundColor = "inherit"
+                 // this.$timer.stop('expand');
+              }
+          },
+          dropPosition(newValue, oldValue){
+              if (newValue !== '0') {
+                  this.$timer.start('expand');
+              } else {
                   this.$timer.stop('expand');
               }
           },
@@ -189,6 +210,20 @@
                   this.handleItemToggle();
               }
           },
+          onThisItemDragEnd (e, _self, model) {
+              this.dropPosition = '0'
+              this.dropCss = ''
+              this.onItemDragEnd(e, _self, model)
+          },
+          onDragState (entered) {
+              if (entered) {
+                  this.isDragEnter = true
+              } else {
+                  this.isDragEnter = false
+                  this.dropPosition = '0'
+                  this.dropCss = ''
+              }
+          },
           handleItemToggle (e) {
               if (this.isFolder) {
                   this.model.opened = !this.model.opened
@@ -223,14 +258,53 @@
               this.isHover = false
           },
           handleItemDrop (e, oriNode, oriItem) {
-              this.$el.style.backgroundColor = "inherit"
-              this.onItemDrop(e, oriNode, oriItem)
-          }
+              //this.$el.style.backgroundColor = "inherit";
+              this.onItemDrop(e, oriNode, oriItem, this.dropPosition);
+              this.dropPosition = '0';
+              this.dropCss = '';
+          },
+          getDropPosition (pageY, offsetTop, offsetHeight) {
+              // 340 - 326 = top = 14. height = 24
+              const top = pageY - offsetTop
+              let canDrop = this.model.canDrop || true;
+              if (canDrop) {
+
+                  if (top < offsetHeight / 3) {
+                      return DropPosition.up
+                  } else if (top > offsetHeight * 2 / 3) {
+                      return DropPosition.down
+                  } else {
+                      return DropPosition.inside
+                  }
+
+              } else {
+
+                  if (top < offsetHeight / 2) {
+                      return DropPosition.up
+                  } else {
+                      return DropPosition.down
+                  }
+              }
+          },
+          onItemDragOver (e, oriNode, oriItem) {
+
+              if (!oriItem.edited) {
+                  const oriPoz = oriNode.$el.getBoundingClientRect()
+                  const position = this.getDropPosition(e.clientY, oriPoz.top, 24).toString()
+
+                  if (this.dropPosition !== position) {
+                      this.dropPosition = position
+                      var dropCss = 'tree-marker-' + position
+                      if (!this.allowedToDrop(oriItem, position)) dropCss += ' not-allowed'
+                      this.dropCss = dropCss
+
+                  }
+              }
+          },
       },
       created () {
           const self = this
           const events = {
-              'click': this.handleItemClick,
               'mouseover': this.handleItemMouseOver,
               'mouseout': this.handleItemMouseOut
           }

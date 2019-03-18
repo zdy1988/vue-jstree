@@ -17,6 +17,7 @@
                               draggable
                               expand-timer
                               :expand-timer-time-out="5000"
+                              execute-sibling-movement
 
                               @item-click="itemClick"
                               @item-drag-start="itemDragStart"
@@ -194,6 +195,7 @@
                 editingItem: {},
                 editingNode: null,
                 itemEvents: {
+
                     mouseover: function () {
                         console.log('mouseover')
                     },

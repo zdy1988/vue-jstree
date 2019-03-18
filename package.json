@@ -19,6 +19,8 @@
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {
+    "lodash": "^4.17.11",
+    "underscore": "^1.9.1",
     "vue-timers": "^1.10.0"
   },
   "devDependencies": {
