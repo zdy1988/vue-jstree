@@ -42,7 +42,7 @@ A tree plugin for vue2
 ## Usage
 
 ```html
-    <v-jstree :data="data" show-checkbox multiple allow-batch whole-row @item-click="itemClick"></v-jstree>
+    <v-jstree :data="data" expand-timer show-checkbox multiple allow-batch whole-row @item-click="itemClick"></v-jstree>
     
     new Vue({
       data: {
@@ -147,6 +147,7 @@ A tree plugin for vue2
 | draggable | Boolean      |    false |  set tree item can be dragged , selective drag and drop can set 'dragDisabled: true' and 'dropDisabled: true' , all default value is 'false' |
 | drag-over-background-color | String | '#C9FDC9' |  set drag over background color |
 | klass | String      |     |  set append tree class |
+| expand-timer | Boolean      | false |  prop to control expanding of nodes during dragOver |
 
 ## Methods in node.model
 
