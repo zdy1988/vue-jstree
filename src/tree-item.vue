@@ -49,8 +49,14 @@
     </li>
 </template>
 <script>
+  import VueTimers from 'vue-timers/mixin';
+  import { timer } from 'vue-timers'
   export default {
       name: 'TreeItem',
+      timers: {
+          expand: { time: 1500, autostart: false }
+      },
+      mixins: [VueTimers],
       props: {
           data: {type: Object, required: true},
           textFieldName: {type: String},
@@ -94,8 +100,10 @@
           isDragEnter (newValue) {
               if (newValue) {
                   this.$el.style.backgroundColor = this.dragOverBackgroundColor
+                  this.$timer.start('expand');
               } else {
                   this.$el.style.backgroundColor = "inherit"
+                  this.$timer.stop('expand');
               }
           },
           data (newValue) {
@@ -169,6 +177,9 @@
           }
       },
       methods: {
+          expand () {
+              this.handleItemToggle();
+          },
           handleItemToggle (e) {
               if (this.isFolder) {
                   this.model.opened = !this.model.opened
