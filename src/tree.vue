@@ -22,6 +22,7 @@
                        :on-item-drop="onItemDrop"
                        :klass="index === data.length-1?'tree-last':''"
                        :expand-timer="expandTimer"
+                       :expand-timer-time-out="expandTimerTimeOut"
             >
                 <template slot-scope="_">
                     <slot :vm="_.vm" :model="_.model">
@@ -66,7 +67,8 @@
             draggable: {type: Boolean, default: false},
             dragOverBackgroundColor: {type: String, default: "#C9FDC9"},
             klass: String,
-            expandTimer:{type: Boolean, default: false}
+            expandTimer:{type: Boolean, default: false},
+            expandTimerTimeOut:{type: Number, default: 1500}
         },
         data() {
             return {

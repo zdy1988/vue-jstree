@@ -16,6 +16,8 @@
                               whole-row
                               draggable
                               expand-timer
+                              :expand-timer-time-out="5000"
+
                               @item-click="itemClick"
                               @item-drag-start="itemDragStart"
                               @item-drag-end="itemDragEnd"

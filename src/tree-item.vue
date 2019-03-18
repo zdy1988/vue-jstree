@@ -37,7 +37,9 @@
                        :on-item-drag-start="onItemDragStart"
                        :on-item-drag-end="onItemDragEnd"
                        :on-item-drop="onItemDrop"
-                       :klass="index === model[childrenFieldName].length-1?'tree-last':''">
+                       :klass="index === model[childrenFieldName].length-1?'tree-last':''"
+                       :expand-timer="expandTimer"
+                       :expand-timer-time-out="expandTimerTimeOut">
                 <template slot-scope="_">
                     <slot :vm="_.vm" :model="_.model">
                         <i :class="_.vm.themeIconClasses" role="presentation" v-if="!model.loading"></i>
@@ -54,7 +56,7 @@
   export default {
       name: 'TreeItem',
       timers: {
-          expand: { time: 1500, autostart: false }
+          expand: { time: 1, autostart: false }
       },
       mixins: [VueTimers],
       props: {
@@ -86,7 +88,8 @@
               type: Function, default: () => false
           },
           klass: String,
-          expandTimer:{type: Boolean, default: false}
+          expandTimer:{type: Boolean, default: false},
+          expandTimerTimeOut:{type: Number, default: 1500}
       },
       data () {
           return {
@@ -176,6 +179,9 @@
                   'display': !!this.allowTransition ? 'block' : (this.model.opened ? 'block' : 'none')
               }
           }
+      },
+      beforeMount(){
+          this.timers.expand.time = this.expandTimerTimeOut;
       },
       methods: {
           expand () {

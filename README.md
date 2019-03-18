@@ -42,7 +42,7 @@ A tree plugin for vue2
 ## Usage
 
 ```html
-    <v-jstree :data="data" expand-timer show-checkbox multiple allow-batch whole-row @item-click="itemClick"></v-jstree>
+    <v-jstree :data="data" expand-timer :expand-timer-time-out="5000" show-checkbox multiple allow-batch whole-row @item-click="itemClick"></v-jstree>
     
     new Vue({
       data: {
@@ -148,6 +148,7 @@ A tree plugin for vue2
 | drag-over-background-color | String | '#C9FDC9' |  set drag over background color |
 | klass | String      |     |  set append tree class |
 | expand-timer | Boolean      | false |  prop to control expanding of nodes during dragOver |
+| expand-timer-time-out | Number | 1500 |  prop to control duration of expanding timer |
 
 ## Methods in node.model
 
