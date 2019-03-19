@@ -18,7 +18,7 @@
                               expand-timer
                               :expand-timer-time-out="5000"
                               execute-sibling-movement
-
+                              multi-tree
                               @item-click="itemClick"
                               @item-drag-start="itemDragStart"
                               @item-drag-end="itemDragEnd"

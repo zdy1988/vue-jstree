@@ -72,6 +72,7 @@
             expandTimer:{type: Boolean, default: false},
             expandTimerTimeOut:{type: Number, default: 1500},
             executeSiblingMovement:{type: Boolean, default:false},
+            multiTree: {type: Boolean, default: false},
         },
         data() {
             return {
@@ -253,18 +254,30 @@
                 }
             },
             onItemDragStart(e, oriNode, oriItem) {
+
                 if (!this.draggable || oriItem.dragDisabled)
                     return false
-                e.dataTransfer.effectAllowed = "move"
-                e.dataTransfer.setData('text', null)
-                this.draggedElm = e.target
-                this.draggedItem = {
-                    item: oriItem,
-                    parentItem: oriNode.parentItem,
-                    index: oriNode.parentItem.findIndex(t => t.id === oriItem.id)
-                }
+                if(this.multiTree){
 
-                this.$emit("item-drag-start", oriNode, oriItem, e)
+                    this.draggedItem = {
+                        item: oriItem,
+                        parentItem: oriNode.parentItem,
+                        index: oriNode.parentItem.findIndex(t => t.id === oriItem.id)
+                    }
+                }else{
+
+                    e.dataTransfer.effectAllowed = "move"
+                    e.dataTransfer.setData('text', null)
+                    this.draggedElm = e.target
+                    this.draggedItem = {
+                        item: oriItem,
+                        parentItem: oriNode.parentItem,
+                        index: oriNode.parentItem.findIndex(t => t.id === oriItem.id)
+                    }
+
+                }
+                this.$emit("item-drag-start", oriNode, oriItem,this.draggedItem, e)
+
             },
             onItemDragEnd(e, oriNode, oriItem) {
                 this.draggedItem = undefined
@@ -287,8 +300,12 @@
             onItemDrop(e, oriNode, oriItem, position) {
 
                 if (!this.draggable) return false
-                  if (this.draggedItem && oriItem[this.childrenFieldName] !== this.draggedItem.item[this.childrenFieldName]) {
-
+                if(this.multiTree){
+                    //for multiTree case - emit drop node, item, and event, emitting even on left/right drop position
+                    this.$emit('item-drop-multi-tree', oriNode, oriItem, e);
+                }
+                else{
+                    if (this.draggedItem && oriItem[this.childrenFieldName] !== this.draggedItem.item[this.childrenFieldName]) {
 
                         var newParent = ''
                         if (position === '2') {
@@ -339,6 +356,8 @@
                         }
 
                     }
+
+                }
 
             }
         },

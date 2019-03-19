@@ -42,7 +42,7 @@ A tree plugin for vue2
 ## Usage
 
 ```html
-    <v-jstree :data="data" expand-timer :expand-timer-time-out="5000" execute-sibling-movement show-checkbox multiple allow-batch whole-row @item-click="itemClick"></v-jstree>
+    <v-jstree :data="data" expand-timer :expand-timer-time-out="5000" execute-sibling-movement multi-tree show-checkbox multiple allow-batch whole-row @item-click="itemClick"></v-jstree>
     
     new Vue({
       data: {
@@ -150,6 +150,7 @@ A tree plugin for vue2
 | expand-timer | Boolean      | false |  prop to control expanding of nodes during dragOver |
 | expand-timer-time-out | Number | 1500 |  prop to control duration of expanding timer |
 | execute-siblings-movement | Boolean | false |  prop to control siblings movement: if true -> move node and emit event, false -> just emit event, and let user decide what to do with it |
+| multi-tree | Boolean | false |  prop to define in which mode tree is working - usual or multiTree |
 
 ## Methods in node.model
 
@@ -185,6 +186,8 @@ A tree plugin for vue2
 **@item-drop-sibling-left**: move dragged node to left of target
 
 **@item-drop-sibling-right**: move dragged node to right of target
+
+**@item-drop-multi-tree**: dropped on node in multiTree mode
 
 ## Data Item Optional Properties
 
