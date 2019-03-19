@@ -149,7 +149,6 @@ A tree plugin for vue2
 | klass | String      |     |  set append tree class |
 | expand-timer | Boolean      | false |  prop to control expanding of nodes during dragOver |
 | expand-timer-time-out | Number | 1500 |  prop to control duration of expanding timer |
-| order-field-name | String |  |  prop to define atribute to rely upon at ordering nodes, if not defined - no additional ordering |
 | execute-siblings-movement | Boolean | false |  prop to control siblings movement: if true -> move node and emit event, false -> just emit event, and let user decide what to do with it |
 
 ## Methods in node.model

@@ -71,10 +71,7 @@
 
             expandTimer:{type: Boolean, default: false},
             expandTimerTimeOut:{type: Number, default: 1500},
-
-            orderFieldName: {type: String, default: ''},
-
-            executeSiblingMovement:{type: Boolean, default:false}
+            executeSiblingMovement:{type: Boolean, default:false},
         },
         data() {
             return {
@@ -86,8 +83,6 @@
             classes() {
                 return [
                     {'tree': true},
-                    'mt-3',
-                    'mb-3',
                     {'tree-default': !this.size},
                     {[`tree-default-${this.size}`]: !!this.size},
                     {'tree-checkbox-selection': !!this.showCheckbox},
@@ -283,114 +278,18 @@
                 if (position === '2' && oriItem.canDrop === false) return false
                 if (this.draggedItem.parentItem === oriItem.children ||
                     this.draggedItem.item === oriItem ||
-                    // (oriItem.children && oriItem.children.indexOf(this.draggedItem.item) !== -1) ||
                     (this.draggedItem.item.children && this.draggedItem.item.children.indexOf(oriItem) !== -1)) {
                     return false
                 }
                 return true
             },
-            replaceDataItem (item, replacement) {
-                var id = item[this.childrenFieldName]
-                var index = _.indexOf(this.data, _.find(this.data, { [this.childrenFieldName]: id }))
-                if (!Object.isFrozen(this.data)) {
-                    this.loadDataOnWatch = false
-                    if (index !== -1) {
-                        this.data.splice(index, 1, _.merge({}, this.data[index], replacement))
-                    } else if (item.item) {
-                        delete item.item.addToDataBefore
-                        delete item.item.addToDataAfter
-                        var newItem = _.merge({}, item.item, replacement)
-                        this.data.push(newItem)
-                    }
-                }
-            },
-            getOrderNextVal (startFrom) {
-                if (startFrom) {
-                    let fromStr = startFrom.split('')
-                    let aChar = fromStr[0] ? fromStr[0].charCodeAt(0) : 34
-                    let bChar = fromStr[1] ? fromStr[1].charCodeAt(0) : 34
-                    if (aChar > this.orderChars[0]) this.orderChars[0] = aChar
-                    if (bChar > this.orderChars[1]) this.orderChars[1] = bChar
-                }
-                this.orderChars[0] = this.orderChars[0] + 1
-                if (this.orderChars[0] === 126) {
-                    this.orderChars[1] = this.orderChars[1] + 1
-                    this.orderChars[0] = 34
-                }
-                return String.fromCharCode(this.orderChars[0]) + String.fromCharCode(this.orderChars[1])
-            },
-            getOrderMidVal (aWord, bWord) {
-                console.log(aWord, bWord);
-                if (aWord === null || aWord === '') aWord = '!!'
-                let aChars = aWord.split('')
-                let bChars = bWord.split('')
-                var cWord = ''
-                let charCount = aChars.length > bChars.length ? aChars.length : bChars.length
-                for (var i = 0; i < charCount + 1; i++) {
-                    let aChar = aChars[i] ? aChars[i].charCodeAt(0) : 33
-                    let bChar = bChars[i] ? bChars[i].charCodeAt(0) : 126
-                    let cChar = Math.floor((aChar + bChar) / 2)
-                    cWord += String.fromCharCode(cChar)
-                    if (cChar !== aChar && cChar !== bChar) {
-                        i = charCount + 1
-                    }
-                }
-                return cWord
-            },
-            getOrder (oriNode, oriItem, position) {
-                var newOrder = 'AA'
-                if (this.orderFieldName !== '') {
-                    if (position === '2') {
-                        if (oriItem.children.length > 0) {
-                            var lastItem = oriItem.children[oriItem.children.length - 1]
-                            if (lastItem[this.orderFieldName]) {
-                                newOrder = this.getOrderNextVal(lastItem[this.orderFieldName])
-                            }
-                        } else {
-                            newOrder = this.getOrderNextVal()
-                        }
-                    } else if (oriNode && oriNode.parentItem) {
-                        // Find position of destination item in the parent group
-                        var oriIndex = oriNode.parentItem.indexOf(oriItem)
 
-                        if (position === '1') {
-                            // Figure out position
-                            if (oriIndex === 0) {
-                                // Droped on the top of the list. Get order based on existing first item
-                                newOrder = this.getOrderMidVal(null, oriItem[this.orderFieldName])
-                            } else {
-                                // Droped on item between first and last. Use above and below item order to calculate new order
-                                var itemAbove2 = oriNode.parentItem[oriIndex - 1]
-                                var itemBelow2 = oriNode.parentItem[oriIndex]
-                                newOrder = this.getOrderMidVal(itemAbove2[this.orderFieldName], itemBelow2[this.orderFieldName])
-                            }
-                        } else if (position === '3') {
-                            // Figure out position
-                            if (oriIndex === oriNode.parentItem.length - 1) {
-                                // Droped at the end of the list. Get order based on existing last item
-                                var endItem = oriNode.parentItem[oriNode.parentItem.length - 1]
-                                if (endItem[this.orderFieldName]) {
-                                    newOrder = this.getOrderNextVal(endItem[this.orderFieldName])
-                                }
-                            } else {
-                                // Droped on item between first and last. Use above and below item order to calculate new order
-                                var itemAbove = oriNode.parentItem[oriIndex]
-                                var itemBelow = oriNode.parentItem[oriIndex + 1]
-                                newOrder = this.getOrderMidVal(itemAbove[this.orderFieldName], itemBelow[this.orderFieldName])
-                            }
-                        }
-                    } else if (oriItem) {
-                        newOrder = this.getOrderNextVal(null, oriItem[this.orderFieldName])
-                    }
-                }
-                return newOrder
-            },
             onItemDrop(e, oriNode, oriItem, position) {
 
                 if (!this.draggable) return false
                   if (this.draggedItem && oriItem[this.childrenFieldName] !== this.draggedItem.item[this.childrenFieldName]) {
 
-                        var newOrder = this.getOrder(oriNode, oriItem, position)
+
                         var newParent = ''
                         if (position === '2') {
                             /** Item is droped on the other item (folder) ****/
@@ -405,7 +304,7 @@
                             })
 
 
-                            this.$emit('item-drop', oriNode, oriItem, this.draggedItem.item, changeObj,e)
+                            this.$emit('item-drop', oriNode, oriItem, this.draggedItem.item, e)
 
 
                         }
@@ -434,25 +333,9 @@
 
                             }
 
-                            // If order is changed, update item
-                            var changeObj = {}
-                            if (this.orderFieldName !== '' && newOrder !== '') {
-
-                                if (this.draggedItem.item[this.childrenFieldName]) this.mapCollapsed[this.draggedItem.item[this.childrenFieldName]][this.orderFieldName] = newOrder
-                                changeObj[this.orderFieldName] = newOrder
-                            }
-                            if (newParent !== '') {
-
-                                changeObj[this.parentFieldName] = newParent
-                            }
+                            this.$emit('item-drop-sibling'+anchor_modificator, oriNode, oriItem, this.draggedItem.item, oriIndex,e)
 
 
-                            this.$emit('item-drop-sibling'+anchor_modificator, oriNode, oriItem, this.draggedItem.item, changeObj,oriIndex,e)
-
-                            _.assign(this.draggedItem.item, changeObj)
-                            this.replaceDataItem(this.draggedItem.item, changeObj)
-
-                            this.draggedItem.item.obj = _.merge({}, this.draggedItem.item.obj, changeObj)
                         }
 
                     }
