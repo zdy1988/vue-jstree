@@ -161,8 +161,10 @@ A tree plugin for vue2
 | addBefore     | (object) newDataItem, (object) selectedNode |
 | openChildren  |  |
 | closeChildren  |  |
+| moveTo | (object)draggedItem, (object)anchorNode|
 | moveLeftTo | (object)draggedItem, (object)anchorNode, oriIndex|
 | moveRightTo | (object)draggedItem, (object)anchorNode, oriIndex|
+| deleteNode | (object)selectedNode|
 ## Event
 
 **@item-click(node, item, e)**
