@@ -115,16 +115,17 @@
           }
       },
       watch: {
-          isDragEnter (newValue) {
-              if (newValue) {
-                  this.$el.style.backgroundColor = this.dragOverBackgroundColor
-                  //this.$timer.start('expand');
-              } else {
-                  this.$el.style.backgroundColor = "inherit"
-                 // this.$timer.stop('expand');
+
+          isHover(newValue){
+
+              if(newValue){
+                  this.$el.style.backgroundColor = this.dragOverBackgroundColor;
+              }else{
+
+                  this.$el.style.backgroundColor = '';
               }
           },
-          dropPosition(newValue, oldValue){
+          dropPosition(newValue){
               if (newValue !== '0') {
                   this.$timer.start('expand');
               } else {
@@ -140,7 +141,7 @@
                   this.handleGroupMaxHeight()
               },
               deep: true
-          }
+          },
       },
       computed: {
           isFolder () {

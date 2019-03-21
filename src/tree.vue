@@ -161,6 +161,15 @@
                         node.opened = false
                     })
                 }
+                node.moveTo = function(draggedItem, anchorNode){
+
+                    var swapItem = Object.assign({},draggedItem);
+                    draggedItem.parentItem.splice(draggedItem.index, 1)
+                    anchorNode.children = anchorNode.children ? anchorNode.children.concat(swapItem.item) : [swapItem.item]
+                    anchorNode.opened = true
+
+
+                }
                 node.moveLeftTo = function(draggedItem, anchorNode, oriIndex){
 
                     draggedItem.parentItem.splice(draggedItem.index, 1)
@@ -171,8 +180,10 @@
 
                     draggedItem.parentItem.splice(draggedItem.index, 1)
                     anchorNode.parentItem.splice(oriIndex+1, 0, draggedItem.item);
-
-
+                }
+                node.deleteNode = function (selectedNode) {
+                    let index = selectedNode.parentItem.findIndex(t => t.id === node.id)
+                    selectedNode.parentItem.splice(index, 1)
                 }
                 return node
             },
@@ -234,23 +245,25 @@
             handleAsyncLoad(oriParent, oriNode, oriItem) {
                 var self = this
                 if (this.async) {
-                    if (oriParent[0].loading) {
-                        this.async(oriNode, (data) => {
-                            if (data.length > 0) {
-                                for (let i in data) {
-                                    if (!data[i].isLeaf) {
-                                        if (typeof data[i][self.childrenFieldName] !== "object") {
-                                            data[i][self.childrenFieldName] = [self.initializeLoading()]
-                                        }
+                    this.async(oriNode, (data) => {
+                        if (data.length > 0) {
+                            for (let i in data) {
+                                if (!data[i].isLeaf) {
+                                    if (typeof data[i][self.childrenFieldName] !== "object") {
+                                        data[i][self.childrenFieldName] = [self.initializeLoading()]
                                     }
-                                    var dataItem = self.initializeDataItem(data[i])
-                                    self.$set(oriParent, i, dataItem)
                                 }
-                            } else {
-                                oriNode.model[self.childrenFieldName] = []
+                                var dataItem = self.initializeDataItem(data[i])
+                                self.$set(oriParent, i, dataItem)
                             }
-                        })
-                    }
+                        } else {
+                            oriNode.model[self.childrenFieldName] = []
+                        }
+                        if(oriNode.model){
+                            oriNode.model.loading = false;
+                        }
+                    })
+
                 }
             },
             onItemDragStart(e, oriNode, oriItem) {
@@ -311,17 +324,12 @@
                         if (position === '2') {
                             /** Item is droped on the other item (folder) ****/
                             if (!this.allowedToDrop(oriItem, position)) return
-                            oriItem.children = oriItem.children ? oriItem.children.concat(this.draggedItem.item) : [this.draggedItem.item]
-                            oriItem.opened = true
-                            newParent = oriItem[this.childrenFieldName]
 
-                            var self = Object.assign({}, this)
-                            this.$nextTick(() => {
-                                self.draggedItem.parentItem.splice(self.draggedItem.index, 1)
-                            })
+                            if(this.executeSiblingMovement){
+                                this.draggedItem.item.moveTo(this.draggedItem, oriItem);
+                            }
 
-
-                            this.$emit('item-drop', oriNode, oriItem, this.draggedItem.item, e)
+                            this.$emit('item-drop', oriNode, oriItem, this.draggedItem, e)
 
 
                         }
@@ -344,13 +352,13 @@
                             else if (position === '3') {
                                 //after anchor node
                                 if(this.executeSiblingMovement) {
-                                    this.draggedItem.item.moveRightTo(this.draggedItem, oriNode, oriNode);
+                                    this.draggedItem.item.moveRightTo(this.draggedItem, oriNode, oriIndex);
                                 }
                                 anchor_modificator = "-right";
 
                             }
 
-                            this.$emit('item-drop-sibling'+anchor_modificator, oriNode, oriItem, this.draggedItem.item, oriIndex,e)
+                            this.$emit('item-drop-sibling'+anchor_modificator, oriNode, oriItem, this.draggedItem, oriIndex,e)
 
 
                         }
