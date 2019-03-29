@@ -23,6 +23,7 @@
                        :klass="index === data.length-1?'tree-last':''"
                        :expand-timer="expandTimer"
                        :expand-timer-time-out="expandTimerTimeOut"
+                       :show-drop-position="showDropPosition"
 
             >
                 <template slot-scope="_">
@@ -47,7 +48,7 @@
         name: 'VJstree',
         props: {
             data: {type: Array},
-            size: {type: String, validator: value => ['large', 'small'].indexOf(value) > -1},
+            size: {type: String, validator: value => ['large', 'small',''].indexOf(value) > -1},
             showCheckbox: {type: Boolean, default: false},
             wholeRow: {type: Boolean, default: false},
             noDots: {type: Boolean, default: false},
@@ -72,6 +73,7 @@
             expandTimer:{type: Boolean, default: false},
             expandTimerTimeOut:{type: Number, default: 1500},
             executeSiblingMovement:{type: Boolean, default:false},
+            showDropPosition:{type: Boolean, default:true},
             multiTree: {type: Boolean, default: false},
         },
         data() {
@@ -280,7 +282,7 @@
                 }else{
 
                     e.dataTransfer.effectAllowed = "move"
-                    e.dataTransfer.setData('text', null)
+                    e.dataTransfer.setData('text', "")
                     this.draggedElm = e.target
                     this.draggedItem = {
                         item: oriItem,

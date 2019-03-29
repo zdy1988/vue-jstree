@@ -40,7 +40,8 @@
                        :on-item-drop="onItemDrop"
                        :klass="index === model[childrenFieldName].length-1?'tree-last':''"
                        :expand-timer="expandTimer"
-                       :expand-timer-time-out="expandTimerTimeOut">
+                       :expand-timer-time-out="expandTimerTimeOut"
+                       :show-drop-position="showDropPosition">
                 <template slot-scope="_">
                     <slot :vm="_.vm" :model="_.model">
                         <i :class="_.vm.themeIconClasses" role="presentation" v-if="!model.loading"></i>
@@ -100,6 +101,7 @@
           klass: String,
           expandTimer:{type: Boolean, default: false},
           expandTimerTimeOut:{type: Number, default: 1500},
+          showDropPosition:{type: Boolean, default: true},
 
       },
       data () {
@@ -117,6 +119,15 @@
       watch: {
 
           isHover(newValue){
+
+              if(newValue){
+                  this.$el.style.backgroundColor = this.dragOverBackgroundColor;
+              }else{
+
+                  this.$el.style.backgroundColor = '';
+              }
+          },
+          isDragEnter(newValue){
 
               if(newValue){
                   this.$el.style.backgroundColor = this.dragOverBackgroundColor;
@@ -296,7 +307,10 @@
                       this.dropPosition = position
                       var dropCss = 'tree-marker-' + position
                       if (!this.allowedToDrop(oriItem, position)) dropCss += ' not-allowed'
-                      this.dropCss = dropCss
+                      if(this.showDropPosition){
+                          this.dropCss = dropCss;
+                      }
+
 
                   }
               }
