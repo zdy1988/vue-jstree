@@ -152,6 +152,7 @@ A tree plugin for vue2
 | execute-siblings-movement | Boolean | false |  prop to control siblings movement: if true -> move node and emit event, false -> just emit event, and let user decide what to do with it |
 | multi-tree | Boolean | false |  prop to define in which mode tree is working - usual or multiTree |
 | show-drop-postion | Boolean | true |  prop to define show or not the tree marker |
+| allow-multi-tree-and-usual | Boolean | false |  prop to define act both behavior for multiTree and usual |
 
 ## Methods in node.model
 

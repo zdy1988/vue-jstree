@@ -75,6 +75,7 @@
             executeSiblingMovement:{type: Boolean, default:false},
             showDropPosition:{type: Boolean, default:true},
             multiTree: {type: Boolean, default: false},
+            allowMultiTreeAndUsual: {type: Boolean, default: false},
         },
         data() {
             return {
@@ -315,11 +316,13 @@
             onItemDrop(e, oriNode, oriItem, position) {
 
                 if (!this.draggable) return false
-                if(this.multiTree){
+                if(this.multiTree && !this.allowMultiTreeAndUsual){
                     //for multiTree case - emit drop node, item, and event, emitting even on left/right drop position
                     this.$emit('item-drop-multi-tree', oriNode, oriItem, e);
                 }
                 else{
+                    this.$emit('item-drop-multi-tree', oriNode, oriItem, e);
+
                     if (this.draggedItem && oriItem[this.childrenFieldName] !== this.draggedItem.item[this.childrenFieldName]) {
 
                         var newParent = ''
@@ -337,8 +340,6 @@
                         }
                         else if (oriNode.parentItem) {
                             /** Item is droped before or under existing item ****/
-
-
 
                             if (oriNode.parentId) newParent = oriNode.parentId
                             // Find position of destination item in the parent group
