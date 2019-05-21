@@ -1,18 +1,18 @@
 {
-  "name": "vue-jstree",
-  "version": "2.1.6",
-  "description": "a tree plugin for vue2",
+  "name": "vue-jstree-extended",
+  "version": "2.1.7",
+  "description": "a tree plugin for vue2 extended with new functions",
   "keywords": [
     "vue2",
     "tree"
   ],
-  "author": "zdy1988 <virus_zhh@126.com>",
+  "author": "AlexZodov",
   "main": "dist/vue-jstree.js",
   "private": false,
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/zdy1988/vue-jstree.git"
+    "url": "https://github.com/shpfive/vue-jstree"
   },
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
@@ -22,19 +22,21 @@
     "vue-timers": "^1.10.0"
   },
   "devDependencies": {
-    "babel-core": "^6.0.0",
-    "babel-loader": "^6.0.0",
-    "babel-preset-env": "^1.5.1",
+    "@babel/core": "^7.4.3",
+    "@babel/preset-env": "^7.4.3",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^6.4.1",
+    "babel-preset-env": "^1.7.0",
     "cross-env": "^3.0.0",
     "css-loader": "^0.25.0",
     "file-loader": "^0.11.2",
     "less": "^2.7.2",
-    "less-loader": "^4.0.5",
+    "less-loader": "^4.1.0",
     "style-loader": "^0.18.2",
-    "vue": "^2.3.3",
-    "vue-loader": "^12.1.0",
-    "vue-template-compiler": "^2.3.3",
-    "webpack": "^2.6.1",
-    "webpack-dev-server": "^2.4.5"
+    "vue": "^2.6.10",
+    "vue-loader": "^14.2.2",
+    "vue-template-compiler": "^2.6.10",
+    "webpack": "^2.7.0",
+    "webpack-dev-server": "^2.11.5"
   }
 }

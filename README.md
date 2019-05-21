@@ -1,23 +1,26 @@
 # vue-jstree
 
-[![npm](https://img.shields.io/npm/dt/vue-jstree.svg?style=flat-square)](https://github.com/zdy1988/vue-jstree)
+[![npm](https://img.shields.io/npm/dt/vue-jstree.svg?style=flat-square)](https://github.com/shpfive/vue-jstree)
 
-[English](./README.md)/[中文](./README-CN.md)
+[English](./README.md)
 
 ##  Introduction
 
-A tree plugin for vue2
+Its a fork of original vue-jstree plugin by zdy1988
+
+https://github.com/zdy1988/vue-jstree
+
+A tree plugin for vue2, extended with new functions, 
+like <br>expand-timers, resibling nodes logic and much more
 
 <img src="./pic.png" width="100%" align=center />
 
-##  DEMO
 
-[http://zdy1988.github.io/vue-jstree](http://zdy1988.github.io/vue-jstree)
 
 ##  NPM
 
 ```html
-    npm install vue-jstree
+    npm install vue-jstree-extended
 ```
 
 ##  ES6
