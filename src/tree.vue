@@ -123,6 +123,7 @@
                 }
             },
             initializeDataItem(item) {
+                let self = this;
                 function Model(item, textFieldName, valueFieldName, childrenFieldName, collapse) {
                     this.id = item.id || ITEM_ID++
                     this[textFieldName] = item[textFieldName] || ''
@@ -132,11 +133,11 @@
                     this.selected = item.selected || false
                     this.disabled = item.disabled || false
                     this.loading = item.loading || false
-                    this[childrenFieldName] = item[childrenFieldName] || []
+                    this[childrenFieldName] = self.initializeData(item[childrenFieldName]) || []
                 }
 
                 let node = Object.assign(new Model(item, this.textFieldName, this.valueFieldName, this.childrenFieldName, this.collapse), item)
-                let self = this
+
                 node.addBefore = function (data, selectedNode) {
                     let newItem = self.initializeDataItem(data)
                     let index = selectedNode.parentItem.findIndex(t => t.id === node.id)
