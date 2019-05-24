@@ -9,7 +9,7 @@ module.exports = {
     //publicPath: '/dist/',
     publicPath: 'dist/',
     filename: 'vue-jstree.js',
-    library: 'vue-jstree',
+    library: 'vue-jstree-extended',
     libraryTarget: 'umd',
     umdNamedDefine: true
   },

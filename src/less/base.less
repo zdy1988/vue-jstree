@@ -31,5 +31,47 @@
 	.tree-anchor, .tree-icon { position:relative; }
 	.tree-wholerow { width:100%; cursor:pointer; z-index: -1; position:absolute; left:0; -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none; user-select:none; }
 }
+.drop-0 { background-color: inherit; }
+.drop-1 { border-top: 2px solid #C9FDC9; }
+.drop-2 { background-color: #C9FDC9 ! important;}
+.drop-3 { border-bottom: 2px solid #C9FDC9; }
+
+
+.not-allowed {
+	border-left-color: red ! important;
+	border-left-width: 0px ! important;
+}
+.tree-marker-1 {
+	top: 0;
+}
+
+.tree-marker-2 {
+	top: 12px;
+}
+
+.tree-marker-3 {
+	bottom: -5px;
+}
+
+.tree-marker-1,
+.tree-marker-2,
+.tree-marker-3 {
+	color: rgb(9, 190, 9);
+	left: 0;
+	position: absolute;
+	margin: -7px 0 0 0;
+	padding: 0;
+	border-right: 0;
+	border-top: 7px solid transparent;
+	border-bottom: 7px solid transparent;
+	border-left: 7px solid;
+	// width: 0;
+	// height: 0;
+	font-size: 0;
+	line-height: 0;
+	display: inline-block;
+	// border-left-color: #999;
+	background: transparent;
+}
 
 

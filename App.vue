@@ -15,6 +15,10 @@
                               allow-batch
                               whole-row
                               draggable
+                              expand-timer
+                              :expand-timer-time-out="5000"
+                              execute-sibling-movement
+                              :multi-tree="multiTree"
                               @item-click="itemClick"
                               @item-drag-start="itemDragStart"
                               @item-drag-end="itemDragEnd"
@@ -26,6 +30,10 @@
                     <span style="float: left; background-color: red; color: #fff; padding: 6px" draggable="true">
             drag me to add new child !
           </span>
+                    <input type="checkbox" id="multiTreeFlag"
+                           v-model="multiTree"
+                           value=true>Enable multiTree<br>
+
                 </div>
                 <div style="width:50%; display:inline-block;">
         <textarea  style="height:300px; width:100%;">
@@ -191,6 +199,7 @@
                 editingItem: {},
                 editingNode: null,
                 itemEvents: {
+
                     mouseover: function () {
                         console.log('mouseover')
                     },
@@ -375,7 +384,8 @@
                     {"text": "root"}
                 ],
                 filesToAdd: 1,
-                filesToAddIndex: 0
+                filesToAddIndex: 0,
+                multiTree:false
             }
         },
         methods: {

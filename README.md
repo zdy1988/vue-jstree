@@ -1,23 +1,26 @@
 # vue-jstree
 
-[![npm](https://img.shields.io/npm/dt/vue-jstree.svg?style=flat-square)](https://github.com/zdy1988/vue-jstree)
+[![npm](https://img.shields.io/npm/dt/vue-jstree.svg?style=flat-square)](https://github.com/shpfive/vue-jstree)
 
-[English](./README.md)/[中文](./README-CN.md)
+[English](./README.md)
 
 ##  Introduction
 
-A tree plugin for vue2
+Its a fork of original vue-jstree plugin by zdy1988
+
+https://github.com/zdy1988/vue-jstree
+
+A tree plugin for vue2, extended with new functions, 
+like <br>expand-timers, resibling nodes logic and much more
 
 <img src="./pic.png" width="100%" align=center />
 
-##  DEMO
 
-[http://zdy1988.github.io/vue-jstree](http://zdy1988.github.io/vue-jstree)
 
 ##  NPM
 
 ```html
-    npm install vue-jstree
+    npm install vue-jstree-extended
 ```
 
 ##  ES6
@@ -42,7 +45,7 @@ A tree plugin for vue2
 ## Usage
 
 ```html
-    <v-jstree :data="data" show-checkbox multiple allow-batch whole-row @item-click="itemClick"></v-jstree>
+    <v-jstree :data="data" expand-timer :expand-timer-time-out="5000" execute-sibling-movement multi-tree show-checkbox multiple allow-batch whole-row @item-click="itemClick"></v-jstree>
     
     new Vue({
       data: {
@@ -147,6 +150,12 @@ A tree plugin for vue2
 | draggable | Boolean      |    false |  set tree item can be dragged , selective drag and drop can set 'dragDisabled: true' and 'dropDisabled: true' , all default value is 'false' |
 | drag-over-background-color | String | '#C9FDC9' |  set drag over background color |
 | klass | String      |     |  set append tree class |
+| expand-timer | Boolean      | false |  prop to control expanding of nodes during dragOver |
+| expand-timer-time-out | Number | 1500 |  prop to control duration of expanding timer |
+| execute-siblings-movement | Boolean | false |  prop to control siblings movement: if true -> move node and emit event, false -> just emit event, and let user decide what to do with it |
+| multi-tree | Boolean | false |  prop to define in which mode tree is working - usual or multiTree |
+| show-drop-postion | Boolean | true |  prop to define show or not the tree marker |
+| allow-multi-tree-and-usual | Boolean | false |  prop to define act both behavior for multiTree and usual |
 
 ## Methods in node.model
 
@@ -157,7 +166,10 @@ A tree plugin for vue2
 | addBefore     | (object) newDataItem, (object) selectedNode |
 | openChildren  |  |
 | closeChildren  |  |
-
+| moveTo | (object)draggedItem, (object)anchorNode|
+| moveLeftTo | (object)draggedItem, (object)anchorNode, oriIndex|
+| moveRightTo | (object)draggedItem, (object)anchorNode, oriIndex|
+| deleteNode | (object)selectedNode|
 ## Event
 
 **@item-click(node, item, e)**
@@ -177,6 +189,12 @@ A tree plugin for vue2
 **item** : current node data item object
 
 **e** : event
+
+**@item-drop-sibling-left**: move dragged node to left of target
+
+**@item-drop-sibling-right**: move dragged node to right of target
+
+**@item-drop-multi-tree**: dropped on node in multiTree mode
 
 ## Data Item Optional Properties
 
