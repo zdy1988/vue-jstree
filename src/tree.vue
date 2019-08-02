@@ -4,6 +4,7 @@
             <tree-item v-for="(child, index) in data"
                        :key="index"
                        :data="child"
+                       :data-fetch-reload="dataFetchReload"
                        :text-field-name="textFieldName"
                        :value-field-name="valueFieldName"
                        :children-field-name="childrenFieldName"
@@ -43,6 +44,7 @@
         name: 'VJstree',
         props: {
             data: {type: Array},
+            dataFetchReload: {type: Boolean, default: false},
             size: {type: String, validator: value => ['large', 'small'].indexOf(value) > -1},
             showCheckbox: {type: Boolean, default: false},
             wholeRow: {type: Boolean, default: false},
@@ -69,6 +71,14 @@
             return {
                 draggedItem: undefined,
                 draggedElm: undefined
+            }
+        },
+        watch: {
+            data: function(newValue){
+                /* dataFetchReload option : reload when the whole data has changed. */
+                if(this.dataFetchReload) {
+                    this.initializeData(newValue)
+                }
             }
         },
         computed: {
