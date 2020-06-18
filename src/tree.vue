@@ -276,7 +276,7 @@
                     this.$emit("item-drop", oriNode, oriItem, draggedItem.item, e)
                 }
             },
-            getTopSelected(referer) {
+            getTopSelected() {
                 var selectedItems = {};
                 this.handleRecursionNodeChilds(this, node => {
                     if (typeof node.model != 'undefined' && node.model.hasOwnProperty('selected') && node.model.selected) {
