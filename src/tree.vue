@@ -275,7 +275,44 @@
                     })
                     this.$emit("item-drop", oriNode, oriItem, draggedItem.item, e)
                 }
-            }
+            },
+            getTopSelected() {
+                var selectedItems = {};
+                this.handleRecursionNodeChilds(this, node => {
+                    if (typeof node.model != 'undefined' && node.model.hasOwnProperty('selected') && node.model.selected) {
+                        var nodeChilds = [];
+                        if (node.model.hasOwnProperty(this.childrenFieldName)) {
+                            for (key in node.model[this.childrenFieldName]) {
+                                if (node.model[this.childrenFieldName].hasOwnProperty(key)) {
+                                    nodeChilds.push(node.model[this.childrenFieldName][key].id);
+                                }
+                            }
+                        }
+
+                        selectedItems[node.model.id] = nodeChilds;
+                    }
+                });
+
+                var allSelected, topSelected = selectedItems;
+
+                for (let [key, branches] of Object.entries(allSelected)) {
+                    for (k = 0, l = branches.length; k < l; k++) {
+                        if (topSelected[branches[k]]) {
+                            delete topSelected[branches[k]];
+                        }
+                    }
+                }
+
+                var cleanAllSelected = [];
+
+                for (i in topSelected) {
+                    if (topSelected.hasOwnProperty(i)) {
+                        cleanAllSelected.push(parseInt(i));
+                    }
+                }
+
+                return cleanAllSelected;
+            },
         },
         created() {
             this.initializeData(this.data)
