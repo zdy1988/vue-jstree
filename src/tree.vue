@@ -37,7 +37,8 @@
     let ITEM_ID = 0
     let ITEM_HEIGHT_SMALL = 18
     let ITEM_HEIGHT_DEFAULT = 24
-    let ITEM_HEIGHT_LARGE = 32
+    //let ITEM_HEIGHT_LARGE = 32
+    let ITEM_HEIGHT_LARGE = 50
 
     export default {
         name: 'VJstree',
@@ -103,11 +104,13 @@
         methods: {
             initializeData(items) {
                 if (items && items.length > 0) {
-                    for (let i in items) {
-                        var dataItem = this.initializeDataItem(items[i])
-                        items[i] = dataItem
-                        this.initializeData(items[i][this.childrenFieldName])
-                    }
+                  var __context = this;
+                  Object.keys(items).forEach(function(A){
+                      var t = __context.initializeDataItem(items[A]);
+                      items[A] = t, __context.initializeData(items[A][__context.childrenFieldName])
+
+                  });
+
                 }
             },
             initializeDataItem(item) {
