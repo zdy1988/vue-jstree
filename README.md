@@ -6,7 +6,7 @@
 
 ##  Introduction
 
-A tree plugin for vue2
+A tree plugin for vue3
 
 <img src="./pic.png" width="100%" align=center />
 
@@ -194,7 +194,7 @@ A tree plugin for vue2
 
 ```
 <v-jstree :data="data">
-  <template scope="_">
+  <template #default="_">
     <div style="display: inherit; width: 200px" @click.ctrl="customItemClickWithCtrl">
       <i :class="_.vm.themeIconClasses" role="presentation" v-if="!_.model.loading"></i>
       {{_.model.text}}
@@ -209,7 +209,7 @@ more elegant:
 							
 ```
 <v-jstree :data="data">
-  <template scope="_">
+  <template #default="_">
     <div style="display: inherit; width: 200px" @click.ctrl="customItemClickWithCtrl" @click.exact="customItemClick(_.vm, _.model, $event)">
     <i :class="_.vm.themeIconClasses" role="presentation" v-if="!_.model.loading"></i>
     {{_.model.text}}
@@ -217,8 +217,6 @@ more elegant:
   </template>
 </v-jstree>
 ```
-
-**scope** be replaced in the **vue@2.5.0+** , over **vue@2.5.0+** use **slot-scope**
 
 ## License
 
