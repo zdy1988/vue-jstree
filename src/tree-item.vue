@@ -19,6 +19,7 @@
         </div>
         <ul role="group" ref="group" class="tree-children" v-if="isFolder" :style="groupStyle">
             <tree-item v-for="(child, index) in model[childrenFieldName]"
+                       ref="children"
                        :key="index"
                        :data="child"
                        :text-field-name="textFieldName"
@@ -38,7 +39,7 @@
                        :on-item-drag-end="onItemDragEnd"
                        :on-item-drop="onItemDrop"
                        :klass="index === model[childrenFieldName].length-1?'tree-last':''">
-                <template slot-scope="_">
+                <template #default="_">
                     <slot :vm="_.vm" :model="_.model">
                         <i :class="_.vm.themeIconClasses" role="presentation" v-if="!model.loading"></i>
                         <span v-html="_.model[textFieldName]"></span>
@@ -180,9 +181,11 @@
                   let length = 0
                   let childHeight = 0
                   if (this.model.opened) {
-                      length = this.$children.length
-                      for (let children of this.$children) {
-                          childHeight += children.maxHeight
+                      if (this.$refs.children) {
+                          length = this.$refs.children.length
+                          for (let children of this.$refs.children) {
+                              childHeight += children.maxHeight
+                          }
                       }
                   }
                   this.maxHeight = length * this.height + childHeight

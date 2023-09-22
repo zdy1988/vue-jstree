@@ -1,11 +1,8 @@
-import Vue from 'vue'
-
-import VJstree from './src/index.js'
-Vue.use(VJstree)
-
+import {createApp,h} from 'vue'
 import App from './App.vue'
 
-new Vue({
-  el: '#app',
-  render: h => h(App)
-})
+var app = createApp({
+  render: () => h(App)
+});
+
+app.mount('#app');

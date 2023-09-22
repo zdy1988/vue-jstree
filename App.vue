@@ -137,7 +137,7 @@
                               @item-drag-end="itemDragEnd"
                               @item-drop-before = "itemDropBefore"
                               @item-drop="itemDrop">
-                        <template slot-scope="_">
+                        <template #default="_">
                             <div style="display: inherit; width: 200px" @click.ctrl="customItemClickWithCtrl">
                                 <i :class="_.vm.themeIconClasses" role="presentation" v-if="!_.model.loading"></i>
                                 {{_.model.text}}
@@ -182,7 +182,11 @@
 </template>
 
 <script>
+    import VJstree from './src/index.js';
     export default {
+        components: {
+            'v-jstree':VJstree
+        },
         name: 'app',
         data () {
             return {
@@ -479,7 +483,7 @@
                 ]
                 this.$refs.tree2.handleAsyncLoad(this.asyncData, this.$refs.tree2)
             },
-            customItemClick: function (node ,item, e) {
+            customItemClick: function (node, item, e) {
                 e.stopPropagation()
                 var index = node.parentItem.indexOf(item)
                 node.parentItem.splice(index, 1)

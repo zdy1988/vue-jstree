@@ -2,6 +2,7 @@
     <div :class="classes" role="tree" onselectstart="return false">
         <ul :class="containerClasses" role="group">
             <tree-item v-for="(child, index) in data"
+                       ref="children"
                        :key="index"
                        :data="child"
                        :text-field-name="textFieldName"
@@ -21,7 +22,7 @@
                        :on-item-drag-end="onItemDragEnd"
                        :on-item-drop="onItemDrop"
                        :klass="index === data.length-1?'tree-last':''">
-                <template slot-scope="_">
+                <template #default="_">
                     <slot :vm="_.vm" :model="_.model">
                         <i :class="_.vm.themeIconClasses" role="presentation" v-if="!_.model.loading"></i>
                         <span v-html="_.model[textFieldName]"></span>
@@ -59,12 +60,13 @@
                     return {}
                 }
             },
-            async: {type: Function},
+            asyncFunction: {type: Function},
             loadingText: {type: String, default: 'Loading...'},
             draggable: {type: Boolean, default: false},
             dragOverBackgroundColor: {type: String, default: "#C9FDC9"},
             klass: String
         },
+        emits:['item-click','item-toggle','item-drag-start','item-drag-end','item-drop-before','item-drop'],
         data() {
             return {
                 draggedItem: undefined,
@@ -163,8 +165,8 @@
             },
             handleRecursionNodeChilds(node, func) {
                 if (func(node) !== false) {
-                    if (node.$children && node.$children.length > 0) {
-                        for (let childNode of node.$children) {
+                    if (node.$refs.children && node.$refs.children.length > 0) {
+                        for (let childNode of node.$refs.children) {
                             if (!childNode.disabled) {
                                 this.handleRecursionNodeChilds(childNode, func)
                             }
@@ -211,9 +213,9 @@
             },
             handleAsyncLoad(oriParent, oriNode, oriItem) {
                 var self = this
-                if (this.async) {
+                if (this.asyncFunction) {
                     if (oriParent[0].loading) {
-                        this.async(oriNode, (data) => {
+                        this.asyncFunction(oriNode, (data) => {
                             if (data.length > 0) {
                                 for (let i in data) {
                                     if (!data[i].isLeaf) {
@@ -222,7 +224,7 @@
                                         }
                                     }
                                     var dataItem = self.initializeDataItem(data[i])
-                                    self.$set(oriParent, i, dataItem)
+                                    self.oriParent[i] = dataItem;
                                 }
                             } else {
                                 oriNode.model[self.childrenFieldName] = []
@@ -281,8 +283,8 @@
             this.initializeData(this.data)
         },
         mounted() {
-            if (this.async) {
-                this.$set(this.data, 0, this.initializeLoading())
+            if (this.asyncFunction) {
+                this.data[0] = this.initializeLoading();
                 this.handleAsyncLoad(this.data, this)
             }
         },
